@@ -1,0 +1,7 @@
+{
+    "Auth": true,
+    "Feature": true,
+    "Property": true,
+    "PropertyType": true,
+    "City": true
+}

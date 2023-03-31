@@ -1,0 +1,11 @@
+{
+    "name": "PropertyType",
+    "alias": "propertytype",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\PropertyType\\Providers\\PropertyTypeServiceProvider"
+    ],
+    "files": []
+}
