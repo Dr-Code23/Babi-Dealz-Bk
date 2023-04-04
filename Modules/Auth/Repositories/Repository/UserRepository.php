@@ -3,18 +3,18 @@
 namespace Modules\Auth\Repositories\Repository;
 
 use App\Models\User;
-use Cassandra\Exception\ValidationException;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Modules\ApiResource\ApiResponse;
 use Modules\Auth\Emails\EventMail;
-use Modules\Auth\Entities\Notification;
 use Modules\Auth\Entities\SendNotification;
 use Modules\Auth\Entities\TermsAndConditions;
-use Modules\Auth\Events\NewUser;
 use Modules\Auth\Repositories\Interfaces\UserRepositoryInterface;
+use Modules\Auth\Traits\VerificationCode;
 use Modules\Auth\Transformers\AgencyResource;
 use Modules\Auth\Transformers\dealsResource;
 use Modules\Auth\Transformers\UserResource;
@@ -22,6 +22,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 
 class UserRepository implements UserRepositoryInterface
 {
+    use VerificationCode,ApiResponse;
     private $userModel;
     private $notificationModel;
 
@@ -41,20 +42,25 @@ class UserRepository implements UserRepositoryInterface
             'phone' => $data->phone,
             'password' => hash::make($data->password),
             'type' => 'customer',
+            'isVerified' => false,
 
         ]);
-//        $user->assignRole('customer');
-//        Auth::login($user);
 
-        return ['statusCode' => 200, 'status' => true,
-            'message' => 'customer successfully registered ',
-            'data' => new UserResource($user)
-        ];
+     $response = $this->sendVerificationCode($user);
+        if (!$response) {
+            // Handle any errors that occur while sending SMS
+            return $this->apiResponse([],'Failed to send verification SMS. Please try again later.',500) ;
+        }
+        return $this->apiResponse(new UserResource($user),'Registration successful. Please check your phone for verification instructions.',200) ;
+
+
+
+
 
     }
     /**
      * @param $data
-     * @return array
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
      */
     public function dealsRegister($data)
     {
@@ -64,16 +70,29 @@ class UserRepository implements UserRepositoryInterface
             'phone' => $data->phone,
             'password' => hash::make($data->password),
             'type' => 'deals',
+            'latitude' => $data->latitude,
+            'longitude' => $data->latitude,
+            'isVerified' => false,
 
         ]);
+        $response = $this->sendVerificationCode($user);
+        if (!$response) {
+            // Handle any errors that occur while sending SMS
+            return $this->apiResponse([],'Failed to send verification SMS. Please try again later.',500) ;
+        }
+        return $this->apiResponse(new DealsResource($user),' Deals Registration successful. Please check your phone for verification instructions.',200) ;
 
-        return ['statusCode' => 200, 'status' => true,
-            'message' => 'successfully registered',
-            'data' => new DealsResource($user)
-        ];
     }
+
+    /**
+     * @param $data
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
+     */
     public function agencyRegister($data)
     {
+        try {
+
+            DB::beginTransaction();
         $user = $this->userModel->create([
             'name' => $data->name,
             'address' => $data->address,
@@ -81,91 +100,118 @@ class UserRepository implements UserRepositoryInterface
             'phone' => $data->phone,
             'password' => hash::make($data->password),
             'type' => 'agency',
+            'latitude' => $data->latitude,
+            'longitude' => $data->latitude,
+            'isVerified' => false,
 
         ]);
 
         if ($data->hasFile('photo')) {
-            $user->media()->delete();
             $user->addMediaFromRequest('photo')->toMediaCollection('avatar');
         }
+        $response = $this->sendVerificationCode($user);
+            DB::commit();
+        if (!$response) {
+            // Handle any errors that occur while sending SMS
+            return $this->apiResponse([],'Failed to send verification SMS. Please try again later.',500) ;
+        }
+        return $this->apiResponse(new AgencyResource($user),' Agency Registration successful. Please check your phone for verification instructions.',200) ;
 
-        return ['statusCode' => 200, 'status' => true,
-            'message' => 'successfully registered',
-            'data' => new AgencyResource($user)
-        ];
+        }catch (\Exception){
+            DB::rollBack();
+            return $this->apiResponse([],'Failed ' ,400,);
+
+
+        }
     }
+
     /**
      * @param $data
-     * @return array|JsonResponse
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
      */
-    public function Login($data)
+    public function verify($data)
     {
 
+        $verification=$this->verifyCode($data);
 
-        try {
+        if ($verification) {
+            $user = tap($this->userModel->where('phone', $data['phone']))->update(['isVerified' => true]);
+            // verification successful
+            return $this->apiResponse([],'Phone number verified successfully', 200);
+        } else {
+            // verification failed
+            return $this->apiResponse([],'Invalid verification code', 400);
 
-        $user = User::Where('phone', $data->input('phone'))->first();
-
-        // Check if the user exists and the password is correct
-        if ($user || !Hash::check($data->input('password'), $user->password)) {
-                if ($user->type == 'deals') {
-                    $token = $user->createToken('api_token')->plainTextToken;
-
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'deals successfully logged in.',
-                        'data' => new DealsResource($user),
-                        'token' => $token
-                    ]);
-                } elseif ($user->type == 'customer')
-
-                {
-                    $user->update(['device_token' => $data->device_token]);
-                    $token = $user->createToken('api_token')->plainTextToken;
-
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'customer successfully logged in.',
-                        'data' => new UserResource($user),
-                        'token' => $token
-                    ]);
-                }elseif ($user->type == 'agency')
-
-                {
-                    $token = $user->createToken('api_token')->plainTextToken;
-
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'agency successfully logged in.',
-                        'data' => new UserResource($user),
-                        'token' => $token
-                    ]);
-                }
-                 else{
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Unauthorized access.'
-                ], 401);
-                     }
-
-        }  else {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Login credentials are invalid.',
-                ], 400);
-            }
-
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Could not create token.',
-            ], 500);
         }
-
 
     }
 
     /**
+     * @param $data
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
+     */
+    public function sendVerify($data)
+    {
+        $user = $this->userModel->where('phone', $data->phone)->first();
+
+        $response = $this->sendVerificationCode($user);
+        if (!$response) {
+            return $this->apiResponse([],'Failed to send verification SMS. Please try again later', 500);
+
+            // Handle any errors that occur while sending SMS
+        }
+        return $this->apiResponse([],'send verification code successful', 200);
+
+    }
+
+    /**
+     * @param $data
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
+     */
+    public function login($data)
+    {
+        try {
+            $user = User::where('phone', $data->input('phone'))->first();
+
+            if (!$user || !Hash::check($data->input('password'), $user->password)) {
+                // User does not exist or the password is incorrect
+                return $this->apiResponse([], 'Invalid login credentials.', 400);
+            }
+
+            if (!$user->isVerified) {
+                // User has not completed the verification process
+                return $this->apiResponse([], 'You must complete the verification process before logging in.', 400);
+            }
+
+            $user->update(['device_token' => $data->device_token]);
+
+            $token = $user->createToken('api_token')->plainTextToken;
+
+            switch ($user->type) {
+                case 'deals':
+                    $message = 'Deals successfully logged in.';
+                    $data = new DealsResource($user);
+                    break;
+                case 'customer':
+                    $message = $user->type . ' successfully logged in.';
+                    $data = new UserResource($user);
+                    break;
+                case 'agency':
+                    $message = $user->type . ' successfully logged in.';
+                    $data = new AgencyResource($user);
+                    break;
+                default:
+                    // User type is not recognized
+                    return $this->apiResponse([], 'Unauthorized access.', 401);
+            }
+
+            return $this->apiResponse($data,$message,200);
+
+        } catch (Exception $e) {
+            // An error occurred while creating the token
+            return $this->apiResponse([], 'Could not create token.', 500);
+        }
+    }    /**
      * @param $data
      * @return JsonResponse
      */
@@ -217,39 +263,31 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @return array
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
      */
     public function profile()
     {
         $id = Auth::id();
         $user = $this->userModel->find($id);
         $termsAndConditions = TermsAndConditions::all();
-        if($user->type == 'customer'){
-        return [
-            'statusCode' => 200,
-            'status' => true,
-            'data' => new UserResource($user),
-            'termsAndConditions' => isset($termsAndConditions) ? $termsAndConditions : [],
-        ];
-    }elseif ($user->type == 'deals')
-        {
-            return [
-                'statusCode' => 200,
-                'status' => true,
-                'data' => new DealsResource($user),
-                'termsAndConditions' => isset($termsAndConditions) ? $termsAndConditions : [],];
-        }else{
-            return [
-                'statusCode' => 200,
-                'status' => true,
-                'data' => new AgencyResource($user),
-                'termsAndConditions' => isset($termsAndConditions) ? $termsAndConditions : [],];
+        switch ($user->type) {
+            case 'customer':
+                $data = new UserResource($user);
+                break;
+            case 'deals':
+                $data = new DealsResource($user);
+                break;
+            default:
+                $data = new AgencyResource($user);
+                break;
         }
+
+        return $this->apiResponse([$data,$termsAndConditions ?: []],'profile',200);
     }
 
     /**
      * @param $data
-     * @return array
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
      */
     public function updateProfile($data)
     {
@@ -260,27 +298,22 @@ class UserRepository implements UserRepositoryInterface
             $user->media()->delete();
             $user->addMediaFromRequest('photo')->toMediaCollection('avatar');
         }
-        if($user->type == 'customer'){
-            return [
-                'statusCode' => 200,
-                'status' => true,
-                'message' => 'customer updated successfully ',
-                'data' => new UserResource($user),
-            ];
-        }elseif ($user->type == 'deals')
-        {
-            return [
-                'statusCode' => 200,
-                'status' => true,
-                'message' => 'deals updated successfully ',
-                'data' => new DealsResource($user),];
-        }else{
-            return [
-                'statusCode' => 200,
-                'status' => true,
-                'message' => 'agency updated successfully ',
-                'data' => new AgencyResource($user),];
+        switch ($user->type) {
+            case 'customer':
+                $data = new UserResource($user);
+                break;
+            case 'deals':
+                $data = new DealsResource($user);
+                break;
+            default:
+                $data = new AgencyResource($user);
+                break;
         }
+
+        return $this->apiResponse($data,$data->type.' updated successfully ',200);
+
+
+
     }
 
     /**

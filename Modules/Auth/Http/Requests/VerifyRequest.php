@@ -4,7 +4,7 @@ namespace Modules\Auth\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateAboutRequest extends FormRequest
+class VerifyRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,8 +14,8 @@ class CreateAboutRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'verification_code' => ['required', 'numeric'],
+            'phone' => ['required', 'string'],
         ];
     }
 

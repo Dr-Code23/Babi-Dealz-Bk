@@ -32,8 +32,9 @@ interface UserRepositoryInterface
 
     public function agencyRegister($data);
 
+    public function verify($data);
 
-
+    public function sendVerify($data);
 
 }
 

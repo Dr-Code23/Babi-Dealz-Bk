@@ -21,7 +21,7 @@ class AgencyResource extends JsonResource
             'agency_owner'=>$this->agency_owner,
             'address' => $this->address,
             'phone' => $this->phone,
-//            'photo' => $this->getFirstMediaUrl('avatar'),
+            'photo' => $this->getFirstMediaUrl('avatar'),
             'type' => $this->type,
 
         ];

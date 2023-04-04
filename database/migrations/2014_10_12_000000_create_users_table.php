@@ -20,12 +20,13 @@ class CreateUsersTable extends Migration
             $table->string('address')->nullable();
             $table->double('latitude', 15, 8)->nullable();
             $table->double('longitude', 15, 8)->nullable();
-            $table->integer('phone')->nullable();
+            $table->string('phone')->unique()->nullable();
             $table->string('password')->nullable();
+            $table->string('api_token', 80)->unique()->nullable();
             $table->string('device_token')->nullable();
             $table->string('type')->default('customer');
-            $table->boolean('approved')->default(1);
-            $table->integer('reset_verification_code')->nullable();
+            $table->boolean('isVerified')->default(false);
+            $table->integer('verification_code')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

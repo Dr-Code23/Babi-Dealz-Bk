@@ -7,16 +7,18 @@ use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 use Laravel\Socialite\Facades\Socialite;
+use Modules\ApiResource\ApiResponse;
 use Modules\Auth\Http\Requests\CreateAgencyRequest;
 use Modules\Auth\Http\Requests\CreateDealsRequest;
 use Modules\Auth\Http\Requests\CreateRequest;
 use Modules\Auth\Http\Requests\loginRequest;
+use Modules\Auth\Http\Requests\VerifyRequest;
 use Modules\Auth\Repositories\Interfaces\UserRepositoryInterface;
 use Modules\Auth\Transformers\UserResource;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
-{
+{ use ApiResponse;
     private $UserRepository;
 
     public function __construct(UserRepositoryInterface $UserRepository)
@@ -34,6 +36,15 @@ class AuthController extends Controller
 
     }
 
+    /**
+     * @param VerifyRequest $request
+     * @return void
+     */
+public function verify(VerifyRequest $request)
+{
+    return $this->UserRepository->verify($request);
+
+}
 
     /**
      * @param loginRequest $request
@@ -42,10 +53,7 @@ class AuthController extends Controller
     public function Login(loginRequest $request): mixed
     {
 
-        $user = $this->UserRepository->login($request);
-
-        return $user;
-
+        return   $this->UserRepository->login($request);
 
     }
 
@@ -70,18 +78,18 @@ class AuthController extends Controller
      * Obtain the user information from Provider.
      *
      * @param $provider
-     * @return JsonResponse
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
      */
     public function handleProviderCallback($provider)
     {
         $validated = $this->validateProvider($provider);
         if (!is_null($validated)) {
-            return $validated;
+            return $this->apiResponse($validated);
         }
         try {
             $user = Socialite::driver($provider)->stateless()->user();
         } catch (ClientException $exception) {
-            return response()->json(['error' => 'Invalid credentials provided.'], 422);
+            return $this->apiResponse([],'Invalid credentials provided.', 422);
         }
 
         $userCreated = User::firstOrCreate(
@@ -103,11 +111,10 @@ class AuthController extends Controller
                 'avatar' => $user->getAvatar()
             ]
         );
-        $userCreated->assignRole('user');
 
-        $token = jwtAuth::fromUser($userCreated);
-        return response()->json(['statusCode' => 200, 'status' => true,
-            'message' => ' success  ', 'data' => new UserResource($userCreated), 'Access-Token' => $token]);
+        $token = $user->createToken('api_token')->plainTextToken;
+        return $this->apiResponse([new UserResource($userCreated),$token],'success',200);
+
     }
 
     /**

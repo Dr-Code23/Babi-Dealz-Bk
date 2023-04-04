@@ -19,7 +19,7 @@ class CreateAgencyRequest extends FormRequest
             'agency_owner' => 'required|string|between:2,100',
             'password' => 'required|string|confirmed|min:6',
             'address' => 'nullable',
-            'phone' => ['required', 'numeric', 'digits_between:10,12', 'unique:users,phone'],
+            'phone' => ['required','string', 'unique:users,phone'],
             'latitude' => ['regex:/^[-]?([1-8]?\d(\.\d+)?|90(\.0+)?)$/'],
             'longitude' => ['regex:/^[-]?((1[0-7]|[1-9])?\d(\.\d+)?|180(\.0+)?)$/'],
 

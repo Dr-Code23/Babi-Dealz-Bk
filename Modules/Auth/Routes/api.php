@@ -33,6 +33,7 @@ Route::post('login', [AuthController::class, 'Login']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('deals-register', [AuthController::class, 'dealsRegister']);
 Route::post('agency-register', [AuthController::class, 'agencyRegister']);
+Route::post('verify', [AuthController::class, 'verify']);
 
 Route::post('change/password', [RestePasswordController::class, 'forgotPassword']);
 Route::post('forgot/check-code', [RestePasswordController::class, 'checkCode']);
