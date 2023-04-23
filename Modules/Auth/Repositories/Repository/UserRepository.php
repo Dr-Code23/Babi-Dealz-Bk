@@ -4,13 +4,13 @@ namespace Modules\Auth\Repositories\Repository;
 
 use App\Models\User;
 use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Modules\ApiResource\ApiResponse;
-use Modules\Auth\Emails\EventMail;
 use Modules\Auth\Entities\SendNotification;
 use Modules\Auth\Entities\TermsAndConditions;
 use Modules\Auth\Repositories\Interfaces\UserRepositoryInterface;
@@ -18,7 +18,6 @@ use Modules\Auth\Traits\VerificationCode;
 use Modules\Auth\Transformers\AgencyResource;
 use Modules\Auth\Transformers\dealsResource;
 use Modules\Auth\Transformers\UserResource;
-use Tymon\JWTAuth\Exceptions\JWTException;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -60,7 +59,7 @@ class UserRepository implements UserRepositoryInterface
     }
     /**
      * @param $data
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
+     * @return Application|ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
      */
     public function dealsRegister($data)
     {
@@ -86,7 +85,7 @@ class UserRepository implements UserRepositoryInterface
 
     /**
      * @param $data
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
+     * @return Application|ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
      */
     public function agencyRegister($data)
     {
@@ -127,7 +126,7 @@ class UserRepository implements UserRepositoryInterface
 
     /**
      * @param $data
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
+     * @return Application|ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
      */
     public function verify($data)
     {
@@ -148,7 +147,7 @@ class UserRepository implements UserRepositoryInterface
 
     /**
      * @param $data
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
+     * @return Application|ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
      */
     public function sendVerify($data)
     {
@@ -166,7 +165,7 @@ class UserRepository implements UserRepositoryInterface
 
     /**
      * @param $data
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
+     * @return Application|ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
      */
     public function login($data)
     {
@@ -213,41 +212,31 @@ class UserRepository implements UserRepositoryInterface
         }
     }    /**
      * @param $data
-     * @return JsonResponse
-     */
+     * @return Application|ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
+ */
     public function forgotPassword($data)
     {
-        $user = $this->userModel->where('email', $data->email)->first();
+        $user = $this->userModel->where('phone', $data->phone)->first();
         if ($user) {
-            // 1 generate verification code
-            $user->reset_verification_code = rand(100000, 999999);
-            $user->save();
-            // 2 send email
-            Mail::to($user->email)->send(new EventMail($user));
-            return response()->json(['status' => true, 'message' => 'check your inbox']);
 
-        } else {
-            return response()->json(['status' => false, 'message' => 'email not found, try again'], 400);
-        }
-    }
+            $response = $this->sendVerificationCode($user);
+            if (!$response) {
+                return $this->apiResponse([],'Failed to send verification SMS. Please try again later', 500);
 
-    public function checkCode($data)
-    {
-        $user = $this->userModel->where('email', $data->email)->first();
-        if ($user) {
-            if ($user->reset_verification_code == $data->code) {
-                return response()->json(['status' => true, 'message' => 'you will be redirected to set new password']);
+                // Handle any errors that occur while sending SMS
             }
-            return response()->json(['status' => false, 'message' => 'code is invalid, try again'], 400);
+            return $this->apiResponse([],'send verification code successful', 200);
 
-        } else {
-            return response()->json(['status' => false, 'message' => 'email not found, try again'], 400);
         }
+        return $this->apiResponse([], 'Invalid login credentials.', 400);
+
     }
+
+
 
     /**
      * @param $data
-     * @return JsonResponse
+     * @return Application|ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
      */
     public function reset($data)
     {
@@ -255,15 +244,17 @@ class UserRepository implements UserRepositoryInterface
         if ($user) {
             $user->password = Hash::make($data->password);
             $user->save();
-            return response()->json([$user->password, 'status' => true, 'message' => 'password has been updated']);
+
+            return $this->apiResponse([], 'password has been updated', 200);
+
 
         } else {
-            return response()->json(['status' => false, 'message' => 'phone not found, try again'], 400);
+            return $this->apiResponse([], 'Invalid login credentials.', 400);
         }
     }
 
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
+     * @return Application|ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
      */
     public function profile()
     {
@@ -287,7 +278,7 @@ class UserRepository implements UserRepositoryInterface
 
     /**
      * @param $data
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
+     * @return Application|ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
      */
     public function updateProfile($data)
     {
@@ -318,7 +309,7 @@ class UserRepository implements UserRepositoryInterface
 
     /**
      * @param $data
-     * @return JsonResponse
+     * @return Application|ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
      */
     public function changePassword($data)
     {
@@ -326,13 +317,15 @@ class UserRepository implements UserRepositoryInterface
 
         // The passwords matches
         if (!Hash::check($data->get('current_password'), $auth->password)) {
-            return response()->json(['error', "Current Password is Invalid"]);
+            return $this->apiResponse([],"Current Password is Invalid",400);
+
         }
 
         $user = $this->userModel->find($auth->id);
         $user->password = Hash::make($data->new_password);
         $user->save();
-        return response()->json(['success', "Password Changed Successfully"]);
+        return $this->apiResponse([],"Password Changed Successfully",200);
+
     }
 
     /**

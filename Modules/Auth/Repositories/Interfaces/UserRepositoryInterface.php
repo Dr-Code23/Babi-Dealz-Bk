@@ -10,7 +10,7 @@ interface UserRepositoryInterface
 
     public function forgotPassword($data);
 
-    public function checkCode($data);
+//    public function checkCode($data);
 
     public function reset($data);
 

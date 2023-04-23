@@ -6,6 +6,7 @@ use App\Models\User;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Request;
 use Laravel\Socialite\Facades\Socialite;
 use Modules\ApiResource\ApiResponse;
 use Modules\Auth\Http\Requests\CreateAgencyRequest;
@@ -40,9 +41,15 @@ class AuthController extends Controller
      * @param VerifyRequest $request
      * @return void
      */
-public function verify(VerifyRequest $request)
+    public function verify(VerifyRequest $request)
+    {
+        return $this->UserRepository->verify($request);
+
+    }
+
+    public function sendVerify(VerifyRequest $request)
 {
-    return $this->UserRepository->verify($request);
+    return $this->UserRepository->sendVerify($request);
 
 }
 
@@ -80,16 +87,22 @@ public function verify(VerifyRequest $request)
      * @param $provider
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
      */
-    public function handleProviderCallback($provider)
+    public function handleProviderCallback(Request $request, $provider)
     {
         $validated = $this->validateProvider($provider);
         if (!is_null($validated)) {
-            return $this->apiResponse($validated);
+            return $validated;
         }
+        $accessToken = $request->input('access_token');
+
         try {
-            $user = Socialite::driver($provider)->stateless()->user();
+            if ($accessToken) {
+                $user = Socialite::driver($provider)->stateless()->userFromToken($accessToken);
+            } else {
+                $user = Socialite::driver($provider)->stateless()->user();
+            }
         } catch (ClientException $exception) {
-            return $this->apiResponse([],'Invalid credentials provided.', 422);
+            return $this->apiResponse([], 'Invalid login credentials.', 400);
         }
 
         $userCreated = User::firstOrCreate(
@@ -112,18 +125,17 @@ public function verify(VerifyRequest $request)
             ]
         );
 
-        $token = $user->createToken('api_token')->plainTextToken;
-        return $this->apiResponse([new UserResource($userCreated),$token],'success',200);
+
+        return $this->apiResponse(new UserResource($user),'Registration successful.',200) ;
 
     }
-
     /**
      * @param $provider
      * @return JsonResponse
      */
     protected function validateProvider($provider)
     {
-        if (!in_array($provider, ['facebook', 'google'])) {
+        if (!in_array($provider, ['facebook', 'google',''])) {
             return response()->json(['error' => 'Please login using facebook or google'], 422);
         }
     }

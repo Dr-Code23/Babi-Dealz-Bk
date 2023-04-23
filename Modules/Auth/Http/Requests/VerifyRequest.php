@@ -14,7 +14,7 @@ class VerifyRequest extends FormRequest
     public function rules()
     {
         return [
-            'verification_code' => ['required', 'numeric'],
+            'verification_code' =>  'numeric',
             'phone' => ['required', 'string'],
         ];
     }

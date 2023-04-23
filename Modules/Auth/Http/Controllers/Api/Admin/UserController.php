@@ -12,6 +12,7 @@ use Modules\Auth\Http\Requests\CreateRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Modules\Auth\Http\Requests\UpdateRequest;
+use Modules\Auth\Transformers\DealsResource;
 use Modules\Auth\Transformers\UserResource;
 
 class UserController extends Controller
@@ -33,7 +34,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if ($request->q) {
-            $data = $this->userModel->where("email", "like", "%$request->q%")
+            $data = $this->userModel->where("phone", "like", "%$request->q%")
                 ->orwhere("name", "like", "%$request->q%")->orderBy('id', 'DESC')->get();
             return response()->json([
                 'success' => true,
@@ -42,7 +43,7 @@ class UserController extends Controller
         }
         $data = $this->userModel
             ->query()
-            ->where('type', 'user')
+            ->where('type', 'customer')
             ->latest()
             ->get();
 
@@ -52,19 +53,40 @@ class UserController extends Controller
         ], 201);
     }
 
-    public function allEmployee(Request $request)
+    public function allDeals(Request $request)
     {
         if ($request->q) {
-            $data = $this->userModel->where("email", "like", "%$request->q%")
+            $data = $this->userModel->where("phone", "like", "%$request->q%")
                 ->orwhere("name", "like", "%$request->q%")->orderBy('id', 'DESC')->get();
             return response()->json([
                 'success' => true,
-                'user' => UserResource::collection($data)
+                'user' => DealsResource::collection($data)
             ], 201);
         }
         $data = $this->userModel
             ->query()
-            ->where('type', 'employee')
+            ->where('type', 'deals')
+            ->latest()
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'user' => UserResource::collection($data)
+        ], 201);
+    }
+    public function allAgency(Request $request)
+    {
+        if ($request->q) {
+            $data = $this->userModel->where("phone", "like", "%$request->q%")
+                ->orwhere("name", "like", "%$request->q%")->orderBy('id', 'DESC')->get();
+            return response()->json([
+                'success' => true,
+                'user' => DealsResource::collection($data)
+            ], 201);
+        }
+        $data = $this->userModel
+            ->query()
+            ->where('type', 'deals')
             ->latest()
             ->get();
 
@@ -74,11 +96,6 @@ class UserController extends Controller
         ], 201);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
 
 
     /**
@@ -87,95 +104,16 @@ class UserController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function store(CreateRequest $request)
+
+    public function activate($id)
     {
-
-        $request['type'] = 'admin';
-        $input = $request->all();
-        $input['password'] = Hash::make($input['password']);
-
-        $user = $this->userModel->create($input);
-        $user->assignRole($request->input('role'));
-        return response()->json([
-            'success' => true,
-            'message' => 'User created successfully',
-            'user' => $user
-        ], 201);
-
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return JsonResponse
-     */
-    public function show($id)
-    {
-        $user = $this->userModel->find($id);
-        return response()->json([
-            'success' => true,
-            'message' => 'User',
-            'user' => $user
-        ], 201);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return Response
-     */
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param int $id
-     * @return JsonResponse
-     */
-    public function update(Request $request, $id)
-    {
-
-
-        $input = $request->all();
-        if (!empty($input['password'])) {
-            $input['password'] = Hash::make($input['password']);
-        } else {
-            $input = Arr::except((array)$input, array('password'));
+        $item = User::find($id);
+        if ($item) {
+            $item->active = !$item->active;
+            $item->save();
+            return response()->json(['status' => $item->active, 'msg' => 'updated successfully']);
         }
-
-        $user = $this->userModel->where('id', $id)->first();
-        $user->update($input);
-
-        DB::table('model_has_roles')->where('model_id', $id)->delete();
-
-        $user->assignRole($request->role);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'User updated successfully',
-            'user' => $user
-        ], 201);
-
+        return response()->json(['status' => 0, 'msg' => 'invalid id']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return JsonResponse
-     */
-    public function destroy($id)
-    {
-        $user = $this->userModel->find($id)->delete();
-        return response()->json([
-            'success' => true,
-            'message' => 'success', 'User deleted successfully',
-            'user' => $user
-        ], 201);
-
-
-    }
 }
