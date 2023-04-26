@@ -39,7 +39,7 @@ class AdminRepository implements AdminRepositoryInterface
             'type' => 'admin',
         ]);
 
-        $user->syncRoles(['admin']);
+        // $user->syncRoles(['admin']);
 
         Auth::login($user);
 
@@ -60,7 +60,7 @@ class AdminRepository implements AdminRepositoryInterface
             }
             $token = $user->createToken('api_token')->plainTextToken;
 
-            return $this->apiResponse([$user,'token'=>$token ],'admin successfully logged in',200);
+            return $this->apiResponse(['data'=>new UserResource($user),'token'=>$token ],'admin successfully logged in',200);
 
         }else
            {
@@ -82,7 +82,7 @@ class AdminRepository implements AdminRepositoryInterface
     {
 
         $user = auth()->user();
-        return $this->apiResponse($user,' profile ',200);
+        return $this->apiResponse(new UserResource($user),' profile ',200);
 
     }
 
@@ -100,7 +100,7 @@ class AdminRepository implements AdminRepositoryInterface
             $user->media()->delete();
             $user->addMediaFromRequest('photo')->toMediaCollection('avatar');
         }
-        return $this->apiResponse($user,' updated successfully ',200);
+        return $this->apiResponse(new UserResource($user),' updated successfully ',200);
 
     }
 

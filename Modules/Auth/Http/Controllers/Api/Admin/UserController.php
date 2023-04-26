@@ -5,13 +5,7 @@ namespace Modules\Auth\Http\Controllers\Api\Admin;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Arr;
-use Modules\Auth\Http\Requests\CreateRequest;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Modules\Auth\Http\Requests\UpdateRequest;
 use Modules\Auth\Transformers\DealsResource;
 use Modules\Auth\Transformers\UserResource;
 

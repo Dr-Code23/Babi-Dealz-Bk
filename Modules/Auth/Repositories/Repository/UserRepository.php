@@ -204,7 +204,7 @@ class UserRepository implements UserRepositoryInterface
                     return $this->apiResponse([], 'Unauthorized access.', 401);
             }
 
-            return $this->apiResponse($data,$message,200);
+            return $this->apiResponse(['data'=>$data,'token'=>$token],$message,200);
 
         } catch (Exception $e) {
             // An error occurred while creating the token
