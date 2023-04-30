@@ -44,7 +44,7 @@ Route::get('/auth/{provider}/callback', [AuthController::class, 'handleProviderC
  * user
  */
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:api'])->group(function () {
 
 
     Route::get('logout', [UserProfileController::class, 'logout']);
