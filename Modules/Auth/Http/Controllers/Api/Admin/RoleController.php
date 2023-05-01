@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Modules\Auth\Http\Requests\RoleRequest;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -39,7 +40,7 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        $roles = $this->roleModel->orderBy('id', 'DESC')->paginate(5);
+        $roles = $this->roleModel->where('user_id',Auth::id())->latest()->get();
         return response()->json([
             'success' => true,
             'message' => 'success',
@@ -63,7 +64,10 @@ class RoleController extends Controller
     public function store(RoleRequest $request)
     {
 
-        $role = $this->roleModel->create(['name' => $request->input('name')]);
+        $role = $this->roleModel->create([
+            'name' => $request->input('name'),
+             'user_id' => Auth::id()
+        ]);
         $role->syncPermissions([$request->input('permission')]);
         return response()->json([
             'success' => true,

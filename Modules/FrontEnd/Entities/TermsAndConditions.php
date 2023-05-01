@@ -1,0 +1,19 @@
+<?php
+
+namespace Modules\FrontEnd\Entities;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Modules\Auth\Database\factories\TermsAndConditionsFactory;
+
+class TermsAndConditions extends Model
+{
+    use HasFactory;
+
+    protected $guarded = [];
+
+    protected static function newFactory()
+    {
+        return TermsAndConditionsFactory::new();
+    }
+}
