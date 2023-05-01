@@ -1,13 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Auth\Http\Controllers\Api\Admin\AdminChangePasswordAController;
 use Modules\Auth\Http\Controllers\Api\Admin\AdminController;
 use Modules\Auth\Http\Controllers\Api\Admin\AdminProfileController;
-use Modules\Auth\Http\Controllers\Api\Admin\FrontEnd\AboutController;
-use Modules\Auth\Http\Controllers\Api\Admin\FrontEnd\ContactUsController;
-use Modules\Auth\Http\Controllers\Api\Admin\FrontEnd\FooterController;
-use Modules\Auth\Http\Controllers\Api\Admin\FrontEnd\TermsAndConditionsController;
 use Modules\Auth\Http\Controllers\Api\Admin\RoleController;
 use Modules\Auth\Http\Controllers\Api\Admin\SendNotificationController;
 use Modules\Auth\Http\Controllers\Api\Admin\UserController;
@@ -16,6 +11,10 @@ use Modules\Auth\Http\Controllers\Api\Auth\ChangePasswordController;
 use Modules\Auth\Http\Controllers\Api\Auth\CompanyController;
 use Modules\Auth\Http\Controllers\Api\Auth\RestePasswordController;
 use Modules\Auth\Http\Controllers\Api\Auth\UserProfileController;
+use Modules\ContactUS\Http\Controllers\ContactUsController;
+use Modules\FrontEnd\Http\Controllers\AboutController;
+use Modules\FrontEnd\Http\Controllers\FooterController;
+use Modules\FrontEnd\Http\Controllers\TermsAndConditionsController;
 
 /*
 |--------------------------------------------------------------------------

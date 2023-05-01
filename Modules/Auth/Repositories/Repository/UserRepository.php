@@ -12,12 +12,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Modules\ApiResource\ApiResponse;
 use Modules\Auth\Entities\SendNotification;
-use Modules\Auth\Entities\TermsAndConditions;
 use Modules\Auth\Repositories\Interfaces\UserRepositoryInterface;
 use Modules\Auth\Traits\VerificationCode;
 use Modules\Auth\Transformers\AgencyResource;
 use Modules\Auth\Transformers\dealsResource;
 use Modules\Auth\Transformers\UserResource;
+use Modules\FrontEnd\Entities\TermsAndConditions;
 
 class UserRepository implements UserRepositoryInterface
 {

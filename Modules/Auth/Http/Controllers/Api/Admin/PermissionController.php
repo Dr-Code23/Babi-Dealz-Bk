@@ -2,14 +2,11 @@
 
 namespace Modules\Auth\Http\Controllers\Api\Admin;
 
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\Auth\Entities\About;
 use Modules\Auth\Http\Requests\CreateAboutRequest;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+use Modules\FrontEnd\Entities\About;
 
 class PermissionController extends Controller
 {

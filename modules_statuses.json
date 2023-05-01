@@ -3,5 +3,8 @@
     "Feature": true,
     "Property": true,
     "PropertyType": true,
-    "City": true
+    "City": true,
+    "FrontEnd": true,
+    "Favorite": true,
+    "ContactUS": true
 }
