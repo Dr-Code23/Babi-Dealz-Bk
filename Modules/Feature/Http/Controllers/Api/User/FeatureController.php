@@ -1,20 +1,27 @@
 <?php
 
-namespace Modules\Feature\Http\Controllers;
+namespace Modules\Feature\Http\Controllers\Api\User;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Feature\Repositories\Interfaces\UserRepositoryInterface;
+
+//use Modules\Auth\Repositories\Interfaces\UserRepositoryInterface;
 
 class FeatureController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
+    private UserRepositoryInterface $UserRepository;
+
+    public function __construct(UserRepositoryInterface $UserRepository)
+    {
+        $this->UserRepository = $UserRepository;
+    }
     public function index()
     {
-        return view('feature::index');
+//        return view('feature::index');
+//        return $this->UserRepository->getAllData();
+        return $this->UserRepository->getAllData();
     }
 
     /**
@@ -33,7 +40,8 @@ class FeatureController extends Controller
      */
     public function store(Request $request)
     {
-        //
+//        return  $this->UserRepository->storeData($request);
+        return $this->UserRepository->storeData($request);
     }
 
     /**
@@ -43,7 +51,9 @@ class FeatureController extends Controller
      */
     public function show($id)
     {
-        return view('feature::show');
+//        return view('feature::show');
+
+        return $this->UserRepository->getDataById($id);
     }
 
     /**
@@ -64,7 +74,7 @@ class FeatureController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return $this->UserRepository->updateData($id, $request);
     }
 
     /**
@@ -74,6 +84,6 @@ class FeatureController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return $this->UserRepository-> deleteData($id);
     }
 }

@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Http\Request;
+//use Modules\Feature\Http\Controllers\FeatureController;
+use Modules\Feature\Http\Controllers\Api\User\FeatureController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +17,12 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/feature', function (Request $request) {
-    return $request->user();
-});
+//Route::middleware('auth:api')->get('/feature', function (Request $request) {
+//    return $request->user();
+//});
+
+Route::post('add-feature', [FeatureController::class, 'store']);
+Route::get('get-feature', [FeatureController::class, 'index']);
+Route::get('features/{id}', [FeatureController::class, 'show']);
+Route::post('edit-feature/{id}', [FeatureController::class, 'update']);
+Route::delete('delete-feature/{id}', [FeatureController::class, 'destroy']);

@@ -4,6 +4,10 @@ namespace Modules\Feature\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
+use Modules\Feature\Repositories\Interfaces\AdminRepositoryInterface;
+use Modules\Feature\Repositories\Interfaces\UserRepositoryInterface;
+use Modules\Feature\Repositories\Repository\AdminRepository;
+use Modules\Feature\Repositories\Repository\UserRepository;
 
 class FeatureServiceProvider extends ServiceProvider
 {
@@ -38,6 +42,8 @@ class FeatureServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->register(RouteServiceProvider::class);
+        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+        $this->app->bind(AdminRepositoryInterface::class, AdminRepository::class);
     }
 
     /**
