@@ -4,6 +4,7 @@ namespace Modules\Feature\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Property\Entities\Apartment;
 use Spatie\Translatable\HasTranslations;
 
 
@@ -22,4 +23,9 @@ class Feature extends Model
 //    {
 //        return \Modules\Feature\Database\factories\FeatureFactory::new();
 //    }
+
+    public function apartments()
+    {
+        return $this->belongsToMany(Apartment::class);
+    }
 }
