@@ -16,7 +16,7 @@ use Modules\City\Http\Controllers\Admin\CountryController;
 |
 */
 
-Route::middleware('auth:api')->prefix("admin")->group(function () {
+Route::middleware('auth:api')->group(function () {
 
     Route::get('countries', [CountryController::class, 'index']);
     Route::get('countries/{country}', [CountryController::class, 'show']);
@@ -27,6 +27,6 @@ Route::middleware('auth:api')->prefix("admin")->group(function () {
     Route::get('/cities', [CityController::class, 'index']);
     Route::post('/cities', [CityController::class, 'store']);
     Route::get('/cities/{city}', [CityController::class, 'show']);
-    Route::put('/cities/{city}', [CityController::class, 'update']);
+    Route::post('/cities/{city}', [CityController::class, 'update']);
     Route::delete('/cities/{city}', [CityController::class, 'destroy']);
 });

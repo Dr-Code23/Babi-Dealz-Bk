@@ -8,50 +8,52 @@ use Illuminate\Routing\Controller;
 use Modules\City\Entities\Country;
 use Modules\City\Http\Requests\CountryRequest;
 use Modules\ApiResource\ApiResponse;
+use Modules\City\Services\CountryService;
 
 class CountryController extends Controller
 {
     use apiResponse;
 
+    /**
+     * @var CountryService
+     */
+    private CountryService $countryService;
+
+    /**
+     * @param CountryService $country
+     */
+    public function __construct(CountryService $country)
+    {
+        $this->countryService = $country;
+    }
+
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
+     */
     public function index()
     {
-        $countries = Country::all();
-
-        return $this->apiResponse($countries, 'success', 200);
+        return $this->countryService->index();
     }
 
     public function show(Country $country)
     {
-        return $this->apiResponse($country, 'success', 200);
+        return $this->countryService->show($country) ;
     }
 
     public function store(CountryRequest $request)
     {
-        $country = Country::create($request->only('name'));
-
-        if ($request->hasFile('icon')) {
-            $country->addMediaFromRequest('icon')->toMediaCollection('icon');
-        }
-
-        return $this->apiResponse($country, 'success', 201);
+        return $this->countryService->store($request) ;
     }
 
     public function update(Request $request, $country)
     {
-        $country->update($request->only('name'));
+        return $this->countryService->update($request,$country) ;
 
-        if ($request->hasFile('icon')) {
-            $country->clearMediaCollection('icon');
-            $country->addMediaFromRequest('icon')->toMediaCollection('icon');
-        }
-
-        return $this->apiResponse($country, 'success', 200);
     }
 
     public function destroy(Country $country)
     {
-        $country->delete();
+        return $this->countryService->destroy($country) ;
 
-        return $this->apiResponse(null, 'success', 204);
     }
 }
