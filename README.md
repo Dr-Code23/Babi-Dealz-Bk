@@ -1,6 +1,6 @@
 
 
-<h1>About Babi Dealz 
+<h1>About Babi Dealz </h1>
 
 
 <p>It is a real estate application 
