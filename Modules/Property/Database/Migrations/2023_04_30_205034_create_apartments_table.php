@@ -37,6 +37,7 @@ return new class extends Migration
             $table->number('number_of_bathroom');
             $table->number('role_number');
             $table->string('description')->nullable();
+            $table->string('type')->default('apartment');
 
             $table->timestamps();
         });

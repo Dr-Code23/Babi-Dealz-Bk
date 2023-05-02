@@ -17,10 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('provider');
             $table->string('provider_id');
-            $table->foreignId('user_id')
-                ->constrained('users')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+
             $table->string('avatar')->nullable();
             $table->timestamps();
         });

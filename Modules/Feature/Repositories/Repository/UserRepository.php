@@ -63,18 +63,9 @@ class UserRepository implements UserRepositoryInterface{
         if (!$feature) {
             return $this->apiResponse([], 'Feature not found.', 404);
         }
-//
-//        $title = [
-//            'en' => $data->title_en,
-//            'nl' => $data->title_nl
-//        ];
 
         $updatedData = [
-//            'title' => [
-//                'en' => $data->title_en,
-//                'ar' => $data->title_ar,
-//                'fr' => $data->title_fr
-//            ]
+
         'title'=>$data->title
         ];
 

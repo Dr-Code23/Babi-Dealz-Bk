@@ -13,19 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('apartment_feature', function (Blueprint $table) {
+        Schema::create('cities', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('apartment_id')
-                ->constrained('apartments')
+            $table->string('name');
+            $table->foreignId('country_id')
+                ->constrained('countries')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('feature_id')
-                ->constrained('features')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-
-//            $table->primary(['apartment_id', 'feature_id']);
-
             $table->timestamps();
         });
     }
@@ -37,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('apartment_feature');
+        Schema::dropIfExists('cities');
     }
 };

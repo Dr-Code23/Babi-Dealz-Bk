@@ -24,8 +24,5 @@ class Feature extends Model
 //        return \Modules\Feature\Database\factories\FeatureFactory::new();
 //    }
 
-    public function apartments()
-    {
-        return $this->belongsToMany(Apartment::class);
-    }
+
 }

@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Modules\City\Http\Controllers\Admin\CityController;
+use Modules\City\Http\Controllers\Admin\CountryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +16,17 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/city', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:api')->prefix("admin")->group(function () {
+
+    Route::get('countries', [CountryController::class, 'index']);
+    Route::get('countries/{country}', [CountryController::class, 'show']);
+    Route::post('countries', [CountryController::class, 'store']);
+    Route::post('countries/{country}', [CountryController::class, 'update']);
+    Route::delete('countries/{country}', [CountryController::class, 'destroy']);
+
+    Route::get('/cities', [CityController::class, 'index']);
+    Route::post('/cities', [CityController::class, 'store']);
+    Route::get('/cities/{city}', [CityController::class, 'show']);
+    Route::put('/cities/{city}', [CityController::class, 'update']);
+    Route::delete('/cities/{city}', [CityController::class, 'destroy']);
 });
