@@ -14,15 +14,16 @@ class Favorite extends Model
     protected $guarded = [];
 
 
-    public function services()
+    public function favoritable()
     {
-        return $this->hasMany(Service::class,'id','service_id');
+        return $this->morphTo();
     }
 
-    public function users()
+    public function user()
     {
-        return $this->hasMany(User::class,'id','user_id');
+        return $this->belongsTo(User::class);
     }
+
     protected static function newFactory()
     {
         return \Modules\Favorite\Database\factories\FavoriteFactory::new();
