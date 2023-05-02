@@ -3,7 +3,9 @@
 <h1>About Babi Dealz 
 
 
-
+<p>It is a real estate application 
+It confirms properties that have been added from the Agency 
+The customer can see this real estate can be sent to the agency The owner of the property can search for the location of the property in the map He has several options to search for a budget property or the number of rooms and there are a lot of advantages that we will mention later</p>
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
