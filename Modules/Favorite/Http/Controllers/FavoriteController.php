@@ -5,47 +5,44 @@ namespace Modules\Favorite\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\Favorite\Repositories\Interfaces\FavoriteRepositoryInterface;
+use Modules\Favorite\Services\FavoriteService;
 
 class FavoriteController extends Controller
 {
-    private $FavoriteRepository;
+    private $favoriteService;
 
-    public function __construct(FavoriteRepositoryInterface $FavoriteRepository)
+    public function __construct(FavoriteService $favorite)
     {
-        $this->FavoriteRepository = $FavoriteRepository;
+        $this->favoriteService = $favorite;
     }
     /**
      * Display a listing of the resource.
-     * @return Renderable
      */
     public function index()
     {
-        return $this->FavoriteRepository->index();
+        return $this->favoriteService->index();
     }
 
     public function store(Request $request)
     {
-        return $this->FavoriteRepository->store($request);
+        return $this->favoriteService->favorite($request);
     }
 
     /**
      * Show the specified resource.
      * @param int $id
-     * @return Renderable
      */
     public function show($id)
     {
-        return$this->FavoriteRepository->show($id);
+        return$this->favoriteService->show($id);
     }
 
     /**
      * Remove the specified resource from storage.
      * @param int $id
-     * @return Renderable
      */
-    public function destroy($id)
+    public function unFavorite(Request $request)
     {
-        return $this->FavoriteRepository->destroy($id);
+        return $this->favoriteService->unFavorite($request);
     }
 }

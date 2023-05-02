@@ -21,7 +21,6 @@ class FavoriteShowResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'service' => ServiceResource::collection($this->services),
         ];
     }
 }
