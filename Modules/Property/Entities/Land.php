@@ -12,6 +12,12 @@ class Land extends Model
 
     protected $fillable = [];
 
+    public function getAllMediaUrls(string $collectionName = 'default'): array
+    {
+        return $this->getMedia($collectionName)
+            ->map(fn ($media) => $media->getUrl())
+            ->toArray();
+    }
 
     public function favorites()
     {

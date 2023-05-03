@@ -1,6 +1,12 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Modules\ContactUS\Http\Controllers\ContactUsController;
+use Modules\FrontEnd\Http\Controllers\AboutController;
+use Modules\FrontEnd\Http\Controllers\FooterController;
+use Modules\FrontEnd\Http\Controllers\PolicyAndPrivacyController;
+use Modules\FrontEnd\Http\Controllers\TermsAndConditionsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +19,11 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/frontend', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:api')->group(function (){
+    Route::apiresource('about', AboutController::class);
+    Route::apiresource('footer', FooterController::class,);
+    Route::apiresource('contact-us', ContactUsController::class,);
+    Route::apiresource('terms-and-conditions', TermsAndConditionsController::class,);
+    Route::apiresource('policy-and-privacy', PolicyAndPrivacyController::class,);
+
 });

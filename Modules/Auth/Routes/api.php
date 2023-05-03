@@ -34,7 +34,7 @@ Route::post('deals-register', [AuthController::class, 'dealsRegister']);
 Route::post('agency-register', [AuthController::class, 'agencyRegister']);
 Route::post('verify', [AuthController::class, 'verify']);
 Route::post('sendVerify', [AuthController::class, 'sendVerify']);
-Route::post('change/password', [RestePasswordController::class, 'forgotPassword']);
+Route::post('forgot/password', [RestePasswordController::class, 'forgotPassword']);
 Route::post('reset/password', [RestePasswordController::class, 'reset']);
 Route::get('/auth/{provider}', [AuthController::class, 'redirectToProvider']);
 Route::get('/auth/{provider}/callback', [AuthController::class, 'handleProviderCallback']);
@@ -65,7 +65,7 @@ Route::middleware(['auth:api'])->group(function () {
 Route::post('Admin/Register', [AdminController::class, 'AdminRegister']);
 Route::post('Admin/Login', [AdminController::class, 'AdminLogin']);
 
-Route::middleware(['auth:sanctum'])->prefix("admin")->group(function () {
+Route::middleware(['auth:api'])->prefix("admin")->group(function () {
     Route::get('show-user/{id}', [UserController::class, 'show']);
     Route::apiresource('roles', RoleController::class);
     Route::apiresource('users', UserController::class);
@@ -78,10 +78,6 @@ Route::middleware(['auth:sanctum'])->prefix("admin")->group(function () {
     Route::post('update/profile', [AdminProfileController::class, 'AdminUpdateProfile']);
     Route::get('logout', [AdminProfileController::class, 'Logout']);
     Route::post('send', [SendNotificationController::class, 'sendNotification']);
-    Route::apiresource('about', AboutController::class);
-    Route::apiresource('footer', FooterController::class,);
-    Route::apiresource('contact-us', ContactUsController::class,);
-    Route::apiresource('terms-and-conditions', TermsAndConditionsController::class,);
     Route::post('change-password', [ChangePasswordController::class, 'changePassword']);
 
 
