@@ -36,10 +36,10 @@ return new class extends Migration
             $table->double('longitude', 15, 8)->nullable();
             $table->float('space');
             $table->string('budget');
-            $table->number('number_of_rooms');
-            $table->number('number_of_kitchen');
-            $table->number('number_of_bathroom');
-            $table->number('role_number');
+            $table->integer('number_of_rooms');
+            $table->integer('number_of_kitchen');
+            $table->integer('number_of_bathroom');
+            $table->integer('role_number');
             $table->string('description')->nullable();
             $table->string('type')->default('apartment');
 

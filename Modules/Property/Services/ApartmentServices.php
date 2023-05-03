@@ -1,6 +1,7 @@
 <?php
 
 namespace Modules\Property\Services;
+use Illuminate\Support\Facades\Auth;
 use Modules\ApiResource\ApiResponse;
 use Modules\Property\Entities\Apartment;
 use Modules\Property\Transformers\ApartmentResource;
@@ -16,9 +17,24 @@ class  ApartmentServices
         $this->apartmentModel = $apartmentModel;
     }
 
-    public function storeData(array $data)
+    public function storeData($data): \Illuminate\Foundation\Application|\Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
-        $apartment = Apartment::create($data);
+        $apartment = $this->apartmentModel->create([
+            'user_id' => Auth::id(),
+            'property_type_id' => $data->input('property_type_id'),
+            'city_id' => $data->input('city_id'),
+            'country_id' => $data->input('country_id'),
+            'address' => $data->input('address'),
+            'latitude' => $data->input('latitude'),
+            'longitude' => $data->input('longitude'),
+            'space' => $data->input('space'),
+            'budget' => $data->input('budget'),
+            'number_of_rooms' => $data->input('number_of_rooms'),
+            'number_of_kitchen' => $data->input('number_of_kitchen'),
+            'number_of_bathroom' => $data->input('number_of_bathroom'),
+            'role_number' => $data->input('role_number'),
+            'description' => $data->input('description')
+        ]);
 
         if ($data->gallery) {
             foreach ($data->gallery as $gallery) {
@@ -26,24 +42,27 @@ class  ApartmentServices
             }
         }
 
+        $apartment->features()->sync($data->feature_id);
+
+
 
         if (!$apartment) {
             // Handle any errors that occur while sending SMS
             return $this->apiResponse([],'Failed to store Apartment. Please try again later.',500) ;
         }
         $apartment->with('media');
-        return $this->apiResponse($apartment,' successful you insert Apertment.',200) ;
+        return $this->apiResponse( new ApartmentResource($apartment),' successful you insert Apartment.',200) ;
     }
 
     public function getAllData()
     {
-        $apartment = Apartment::with('media')->get();
+        $apartment = $this->apartmentModel->with('media')->get();
 
         if (!$apartment) {
             return $this->apiResponse([], 'No features found.', 404);
         }
 
-        return $this->apiResponse(ApertmentResource::collection($apartment), 'Successfully retrieved all features.', 200);
+        return $this->apiResponse(ApartmentResource::collection($apartment), 'Successfully retrieved all features.', 200);
     }
 
     public function getDataById($id)
@@ -51,15 +70,15 @@ class  ApartmentServices
         $apartment = $this->apartmentModel->find($id);
 
         if (!$apartment) {
-            return $this->apiResponse([], 'Feature not found.', 404);
+            return $this->apiResponse([], 'apartment not found.', 404);
         }
 
-        return $this->apiResponse($apartment, 'Successfully retrieved feature.', 200);
+        return $this->apiResponse($apartment, 'Successfully retrieved apartment.', 200);
     }
 
-//    public function updateData($id, $data):Apartment
+//    public function updateData($id, $data): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
 //    {
-//        $apertment = Apertment::find($id);
+//        $apertment = $this->apartmentModel->find($id);
 //
 //        if (!$apertment) {
 //            return $this->apiResponse([], 'Feature not found.', 404);
@@ -67,27 +86,27 @@ class  ApartmentServices
 //
 //        $updatedData = [
 //
-////            'title'=>$data->title
+//            'title'=>$data->title
 //        ];
 //
 //        $apertment->update($updatedData);
 //
-//        return $this->apiResponse(new ApartmentResource($apertment), 'Successfully updated feature.', 200);
+//        return $this->apiResponse(new ApartmentResource($apertment), 'Successfully updated apartment.', 200);
 //    }
-//
-//
+
+
     public function deleteData($id)
     {
             $apartment = $this->apartmentModel->find($id);
 
 
         if (!$apartment) {
-            return $this->apiResponse([], 'Feature not found', 404);
+            return $this->apiResponse([], 'apartment not found', 404);
         }
 
         $apartment->delete();
 
-        return $this->apiResponse([], 'Feature deleted successfully', 200);
+        return $this->apiResponse([], 'apartment deleted successfully', 200);
     }
 
 

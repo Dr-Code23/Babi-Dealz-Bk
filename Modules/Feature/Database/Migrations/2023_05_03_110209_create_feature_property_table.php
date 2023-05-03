@@ -14,10 +14,31 @@ return new class extends Migration
     public function up()
     {
         Schema::create('feature_property', function (Blueprint $table) {
-            $table->foreignId('feature_id')->constrained();
-            $table->enum('property_type', ['apartment', 'villa', 'land', 'shop','hangar']);
-            $table->morphs('property');
-            $table->primary(['feature_id', 'property_type', 'property_id']);
+            $table->id();
+            $table->foreignId('feature_id')
+                ->constrained('features')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->foreignId('apartment_id')->nullable()
+                ->constrained('apartments')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->foreignId('villa_id')->nullable()
+                ->constrained('villas')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->foreignId('land_id')->nullable()
+                ->constrained('lands')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->foreignId('shop_id')->nullable()
+                ->constrained('shops')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->foreignId('hangar_id')->nullable()
+                ->constrained('hangars')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->timestamps();
         });
     }

@@ -5,15 +5,16 @@ namespace Modules\Property\Http\Controllers\Agency;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Property\Http\Requests\ApartmentRequest;
 use Modules\Property\Services\ApartmentServices;
 
 class ApartmentController extends Controller
 {
-    private ApartmentServices $Apertment;
+    private ApartmentServices $apartmentServices;
 
-    public function __construct(ApartmentServices $Apertment)
+    public function __construct(ApartmentServices $apartmentServices)
     {
-        $this->Apertment = $Apertment;
+        $this->apartmentServices = $apartmentServices;
     }
     public function index()
     {
@@ -32,11 +33,11 @@ class ApartmentController extends Controller
     /**
      * Store a newly created resource in storage.
      * @param Request $request
-     * @return Renderable
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ApartmentRequest $request)
     {
-        return $this->Apartment->storeData($request);
+        return $this->apartmentServices->storeData($request);
     }
 
     /**

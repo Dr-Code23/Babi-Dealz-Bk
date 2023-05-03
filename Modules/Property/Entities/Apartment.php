@@ -5,9 +5,11 @@ namespace Modules\Property\Entities;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\City\Entities\City;
 use Modules\City\Entities\Country;
 
 use Modules\Favorite\Entities\Favorite;
+use Modules\Feature\Entities\Feature;
 use Modules\PropertyType\Entities\PropertyType;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -36,7 +38,10 @@ class Apartment extends Model implements HasMedia
     {
         return $this->belongsTo(User::class,'user_id','id');
     }
-
+    public function features()
+    {
+        return $this->belongsToMany(Feature::class, 'feature_property');
+    }
 
 
     public function getAllMediaUrls(string $collectionName = 'default'): array

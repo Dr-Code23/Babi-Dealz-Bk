@@ -108,19 +108,19 @@ class FavoriteService
 
         switch ($request->type) {
             case 'apartment':
-                $model = $this->apartmentModel->find($request->modelId);
+                $model = $this->apartmentModel->find($request->modelid);
                 break;
             case 'villa':
-                $model = $this->villaModel->find($request->modelId);
+                $model = $this->villaModel->find($request->modelid);
                 break;
             case 'land':
-                $model = $this->landModel->find($request->modelId);
+                $model = $this->landModel->find($request->modelid);
                 break;
             case 'shop':
-                $model = $this->shopModel->find($request->modelId);
+                $model = $this->shopModel->find($request->modelid);
                 break;
             case 'hanger':
-                $model = $this->hangarModel->find($request->modelId);
+                $model = $this->hangarModel->find($request->modelid);
                 break;
             default:
                 return $this->apiResponse([], 'Invalid model type.', 400);
