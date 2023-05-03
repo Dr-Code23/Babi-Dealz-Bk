@@ -2,6 +2,7 @@
 
 namespace Modules\Auth\Repositories\Interfaces;
 
+
 interface UserRepositoryInterface
 {
     public function register($data);

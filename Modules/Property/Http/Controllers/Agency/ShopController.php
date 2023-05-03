@@ -1,12 +1,12 @@
 <?php
 
-namespace Modules\Feature\Http\Controllers;
+namespace Modules\Property\Http\Controllers\Agency;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-class FeatureController extends Controller
+class ShopController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class FeatureController extends Controller
      */
     public function index()
     {
-        return view('feature::index');
+        return view('property::index');
     }
 
     /**
@@ -23,7 +23,7 @@ class FeatureController extends Controller
      */
     public function create()
     {
-        return view('feature::create');
+        return view('property::create');
     }
 
     /**
@@ -43,7 +43,7 @@ class FeatureController extends Controller
      */
     public function show($id)
     {
-        return view('feature::show');
+        return view('property::show');
     }
 
     /**
@@ -53,7 +53,7 @@ class FeatureController extends Controller
      */
     public function edit($id)
     {
-        return view('feature::edit');
+        return view('property::edit');
     }
 
     /**

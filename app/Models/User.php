@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\Favorite\Entities\Favorite;
+use Modules\Property\Entities\Apartment;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -28,6 +29,11 @@ class User extends Authenticatable implements HasMedia
     public function favorites()
     {
         return $this->morphToMany(Favorite::class, 'favoritable');
+    }
+
+    public function apartments()
+    {
+        return $this->hasMany(Apartment::class);
     }
     /**
      * The attributes that should be hidden for serialization.
