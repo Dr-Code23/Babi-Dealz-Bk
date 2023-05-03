@@ -5,6 +5,7 @@ namespace Modules\Property\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Favorite\Entities\Favorite;
+use Modules\Feature\Entities\Feature;
 
 class Villa extends Model
 {
@@ -16,6 +17,16 @@ class Villa extends Model
 
 
 
+    public function getAllMediaUrls(string $collectionName = 'default'): array
+    {
+        return $this->getMedia($collectionName)
+            ->map(fn ($media) => $media->getUrl())
+            ->toArray();
+    }
+    public function features()
+    {
+        return $this->belongsToMany(Feature::class)->withTimestamps();
+    }
     public function favorites()
     {
         return $this->morphMany(Favorite::class, 'favoritable');
