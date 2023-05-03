@@ -59,9 +59,9 @@ class  ApartmentServices
 
 //    public function updateData($id, $data):Apartment
 //    {
-//        $apertment = Apertment::find($id);
+//        $apartment = Apartment::find($id);
 //
-//        if (!$apertment) {
+//        if (!$apartment) {
 //            return $this->apiResponse([], 'Feature not found.', 404);
 //        }
 //
@@ -70,12 +70,11 @@ class  ApartmentServices
 ////            'title'=>$data->title
 //        ];
 //
-//        $apertment->update($updatedData);
+//        $apartment->update($updatedData);
 //
-//        return $this->apiResponse(new ApartmentResource($apertment), 'Successfully updated feature.', 200);
+//        return $this->apiResponse($apartment, 'Successfully updated feature.', 200);
 //    }
-//
-//
+
     public function deleteData($id)
     {
             $apartment = $this->apartmentModel->find($id);

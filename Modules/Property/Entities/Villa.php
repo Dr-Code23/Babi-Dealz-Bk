@@ -15,6 +15,7 @@ class Villa extends Model
 
 
 
+
     public function favorites()
     {
         return $this->morphMany(Favorite::class, 'favoritable');

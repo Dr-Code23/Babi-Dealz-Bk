@@ -10,7 +10,7 @@ class Hangar extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $guarded = [];
 
 
     public function favorites()
