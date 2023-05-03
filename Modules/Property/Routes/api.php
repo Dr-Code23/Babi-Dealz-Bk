@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Modules\Property\Http\Controllers\Agency\ApartmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,5 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/property', function (Request $request) {
     return $request->user();
 });
+
+Route::post('add-apartment', [ApartmentController::class, 'store']);

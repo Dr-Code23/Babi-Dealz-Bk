@@ -2,12 +2,13 @@
 
 namespace Modules\Property\Entities;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\City\Entities\Country;
-use Modules\Feature\Entities\Feature;
 
 use Modules\Favorite\Entities\Favorite;
+use Modules\PropertyType\Entities\PropertyType;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -29,9 +30,12 @@ class Apartment extends Model implements HasMedia
     }
     public function propertyType()
     {
-        return $this->belongsTo(Property::class, 'property_type_id','id');
+        return $this->belongsTo(PropertyType::class);
     }
-
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id','id');
+    }
 
 
 

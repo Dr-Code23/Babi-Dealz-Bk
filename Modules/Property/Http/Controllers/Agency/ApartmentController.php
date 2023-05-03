@@ -36,7 +36,7 @@ class ApartmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return $this->Apartment->storeData($request);
     }
 
     /**
