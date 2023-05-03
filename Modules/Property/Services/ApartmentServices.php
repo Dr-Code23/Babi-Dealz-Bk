@@ -37,7 +37,7 @@ class  ApartmentServices
 
     public function getAllData()
     {
-        $apartment = $this->apartmentModel->all();
+        $apartment = Apartment::with('media')->get();
 
         if (!$apartment) {
             return $this->apiResponse([], 'No features found.', 404);
