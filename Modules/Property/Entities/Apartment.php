@@ -28,7 +28,7 @@ class Apartment extends Model implements HasMedia
     {
         return $this->belongsTo(Country::class,'country_id','id');
     }
-    public function propertyType()
+    public function propertytype()
     {
         return $this->belongsTo(PropertyType::class);
     }
