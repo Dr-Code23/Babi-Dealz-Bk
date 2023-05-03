@@ -18,7 +18,7 @@ class ApartmentController extends Controller
     }
     public function index()
     {
-        return view('property::index');
+        return $this->apartmentServices->getAllData();
     }
 
     public function create()
@@ -34,7 +34,7 @@ class ApartmentController extends Controller
 
     public function show($id)
     {
-        return view('property::show');
+        return $this->apartmentServices->getDataById($id);
     }
 
     /**
@@ -47,13 +47,13 @@ class ApartmentController extends Controller
         return view('property::edit');
     }
 
-    public function update(Request $request, $id)
+    public function update(ApartmentRequest $request, $id)
     {
-        //
+        return $this->apartmentServices->updateDataById($request,$id);
     }
 
     public function destroy($id)
     {
-        //
+        return $this->apartmentServices->deleteData($id);
     }
 }
