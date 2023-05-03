@@ -8,19 +8,22 @@ use Illuminate\Routing\Controller;
 use Modules\City\Entities\City;
 use Modules\ApiResource\ApiResponse;
 use Modules\City\Http\Requests\CityRequest;
+use Modules\City\Services\CityService;
 
 class CityController extends Controller
 {
-    use ApiResponse;
+    private CityService $cityService;
 
+    public function __construct(CityService $city)
+    {
+        $this->cityService = $city;
+    }
     /**
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
      */
     public function index(): \Illuminate\Foundation\Application|\Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
-        $cities = City::all();
-
-        return $this->apiResponse($cities, 'success', 200);
+      return $this->cityService->index();
     }
 
     /**
@@ -29,7 +32,7 @@ class CityController extends Controller
      */
     public function show(City $city)
     {
-        return $this->apiResponse($city, 'success', 200);
+        return $this->cityService->show($city);
     }
 
     /**
@@ -38,11 +41,7 @@ class CityController extends Controller
      */
     public function store(CityRequest $request)
     {
-
-
-        $city = City::create($request);
-
-        return $this->apiResponse($city, 'City created successfully.', 201);
+        return $this->cityService->store($request);
     }
 
     /**
@@ -50,13 +49,9 @@ class CityController extends Controller
      * @param City $city
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
      */
-    public function update(CityRequest $request, City $city)
+    public function update(CityRequest $request,$city)
     {
-
-
-        $city->update($request);
-
-        return $this->apiResponse($city, 'City updated successfully.', 200);
+        return $this->cityService->update($request,$city);
     }
 
     /**
@@ -65,8 +60,6 @@ class CityController extends Controller
      */
     public function destroy(City $city)
     {
-        $city->delete();
-
-        return $this->apiResponse(null, 'City deleted successfully.', 204);
+       return $this->cityService->destroy($city);
     }
 }

@@ -41,7 +41,7 @@ class AdminRepository implements AdminRepositoryInterface
 
         // $user->syncRoles(['admin']);
 
-        Auth::login($user);
+//        Auth::login($user);
 
         return $this->apiResponse(new UserResource($user),'Registration successful. Please check your phone for verification instructions.',200) ;
 

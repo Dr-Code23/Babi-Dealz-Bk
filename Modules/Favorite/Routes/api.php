@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Modules\Favorite\Http\Controllers\FavoriteController;
 
 /*
@@ -14,11 +15,9 @@ use Modules\Favorite\Http\Controllers\FavoriteController;
 |
 */
 
-Route::middleware(['user_api', 'setlocale'])->group(function () {
-    Route::get('Favorite', [FavoriteController::class, 'index']);
-    Route::post('create/Favorite', [FavoriteController::class, 'store']);
-    Route::get('show/Favorite/{id}', [FavoriteController::class, 'show']);
-    Route::delete('delete/Favorite/{id}', [FavoriteController::class, 'destroy']);
-
-
+Route::middleware(['auth:api'])->group(function () {
+    Route::get('favorites', [FavoriteController::class, 'index']);
+    Route::post('favorites', [FavoriteController::class, 'store']);
+    Route::get('favorites/{id}', [FavoriteController::class, 'show']);
+    Route::post('unFavorite', [FavoriteController::class, 'unFavorite']);
 });

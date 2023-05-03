@@ -9,41 +9,54 @@ class  ApartmentServices
 {
 
     use ApiResponse;
-    public function storeData(array $data):Apartment
+    private Apartment $apartmentModel;
+
+    public function __construct(Apartment $apartmentModel)
+    {
+        $this->apartmentModel = $apartmentModel;
+    }
+
+    public function storeData(array $data)
     {
         $apartment = Apartment::create($data);
 
-//        $apartment->roles()->sync($data['roles']);
+        if ($data->gallery) {
+            foreach ($data->gallery as $gallery) {
+                $apartment->addMedia($gallery)->toMediaCollection('apartments');
+            }
+        }
+
 
         if (!$apartment) {
             // Handle any errors that occur while sending SMS
             return $this->apiResponse([],'Failed to store Apartment. Please try again later.',500) ;
         }
-        return $this->apiResponse(new ApartmentResource($apartment),' successful you insert Apertment.',200) ;
+        $apartment->with('media');
+        return $this->apiResponse($apartment,' successful you insert Apertment.',200) ;
     }
 
-//    public function getAllData():Apertment
-//    {
-//        $apertment = Apertment::all();
-//
-//        if (!$apertment) {
-//            return $this->apiResponse([], 'No features found.', 404);
-//        }
-//
-//        return $this->apiResponse(ApertmentResource::collection($apertment), 'Successfully retrieved all features.', 200);
-//    }
-//
-//    public function getDataById($id):Apartment
-//    {
-//        $apertment = Apartment::find($id);
-//
-//        if (!$apertment) {
-//            return $this->apiResponse([], 'Feature not found.', 404);
-//        }
-//
-//        return $this->apiResponse(new ApertmentResource($apertment), 'Successfully retrieved feature.', 200);
-//    }
-//
+    public function getAllData()
+    {
+        $apartment = $this->apartmentModel->all();
+
+        if (!$apartment) {
+            return $this->apiResponse([], 'No features found.', 404);
+        }
+
+        return $this->apiResponse(ApertmentResource::collection($apartment), 'Successfully retrieved all features.', 200);
+    }
+
+    public function getDataById($id)
+    {
+        $apartment = $this->apartmentModel->find($id);
+
+        if (!$apartment) {
+            return $this->apiResponse([], 'Feature not found.', 404);
+        }
+
+        return $this->apiResponse($apartment, 'Successfully retrieved feature.', 200);
+    }
+
 //    public function updateData($id, $data):Apartment
 //    {
 //        $apertment = Apertment::find($id);
@@ -63,20 +76,19 @@ class  ApartmentServices
 //    }
 //
 //
-//    public function deleteData($id):Apartment
-//    {
-//        $apertment = Apertment::find($id);
-//
-//        if (!$apertment) {
-//            return $this->apiResponse([], 'Feature not found', 404);
-//        }
-//
-//        $apertment->delete();
-//
-//        return $this->apiResponse([], 'Feature deleted successfully', 200);
-//    }
-//
-//
+    public function deleteData($id)
+    {
+            $apartment = $this->apartmentModel->find($id);
+
+
+        if (!$apartment) {
+            return $this->apiResponse([], 'Feature not found', 404);
+        }
+
+        $apartment->delete();
+
+        return $this->apiResponse([], 'Feature deleted successfully', 200);
+    }
 
 
 

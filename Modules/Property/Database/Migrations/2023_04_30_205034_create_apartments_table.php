@@ -16,15 +16,19 @@ return new class extends Migration
         Schema::create('apartments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('property_type_id')
-                ->constrained('property')
+                ->constrained('property_types')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('city_id')
-                ->constrained('city')
+                ->constrained('cities')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('country_id')
-                ->constrained('country')
+                ->constrained('countries')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->foreignId('user_id')
+                ->constrained('users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->string('address')->nullable();

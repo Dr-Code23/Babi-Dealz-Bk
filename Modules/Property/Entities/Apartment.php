@@ -8,11 +8,14 @@ use Modules\City\Entities\Country;
 use Modules\Feature\Entities\Feature;
 
 use Modules\Favorite\Entities\Favorite;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 
-class Apartment extends Model
+class Apartment extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory ,InteractsWithMedia;
+
 
     protected $guarded = [];
 
