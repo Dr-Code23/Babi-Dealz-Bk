@@ -28,7 +28,8 @@ class ApartmentRequest extends FormRequest
             'number_of_bathroom' => 'required|integer|min:1',
             'role_number' => 'required|integer|min:1',
             'description' => 'nullable|string|max:1000',
-            'gallery' => ['required','max:2048'],
+            'gallery' => ['sometimes', 'array', 'max:2048', 'image']
+
         ];
     }
 

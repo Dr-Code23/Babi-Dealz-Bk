@@ -20,10 +20,10 @@ class HangarResource extends JsonResource
         return [
 
             'id' => $this->id,
-            'user_id' => $this->user_id,
-            'property_type_id' => $this->property_type_id,
-            'city_id' => $this->city_id,
-            'country_id' => $this->country_id,
+            'agency' => new AgencyResource($this->user),
+            'property_type' => $this->propertytype,
+            'city' => new CityResource($this->city->pluck('name')),
+            'country' => new CountryResource($this->country->pluck('name')),
             'address' => $this->address ?? '',
             'latitude' => $this->latitude ?? 0,
             'longitude' => $this->longitude ??0,
@@ -37,10 +37,8 @@ class HangarResource extends JsonResource
             'updated_at' => $this->updated_at,
             'features' => $this->features->pluck('title'),
             'gallery' => $this->getAllMediaUrls('hangars'),
-            'user' => new AgencyResource($this->user),
-            'property_type' => $this->whenLoaded('propertyType'),
-            'city' => new CityResource($this->city->pluck('name')),
-            'country' => new CountryResource($this->country->pluck('name'))
+            'type'=> $this->type
+
         ];
     }
 }

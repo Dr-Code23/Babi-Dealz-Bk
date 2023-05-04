@@ -46,7 +46,7 @@ class Land extends Model implements HasMedia
     }
     public function features()
     {
-        return $this->belongsToMany(Feature::class,'feature_property')->withTimestamps();
+        return $this->belongsToMany(Feature::class,'feature_property');
     }
     public function favorites()
     {
