@@ -20,7 +20,7 @@ Route::middleware('auth:api')->group( function () {
     // apartment routes
     Route::post('add-apartment', [ApartmentController::class, 'store']);
     Route::get('get-apartments', [ApartmentController::class, 'index']);
-//    Route::get('get-apartment/{id}', [ApartmentController::class, 'show']);
+    Route::get('get-apartment/{id}', [ApartmentController::class, 'show']);
     Route::post('update-apartment/{id}', [ApartmentController::class, 'update']);
     Route::delete('delete-apartment/{id}', [ApartmentController::class, 'destroy']);
 
@@ -30,6 +30,6 @@ Route::middleware('auth:api')->group( function () {
     Route::get('get-hangar/{id}', [HangarController::class, 'show']);
     Route::post('update-hangar/{id}', [HangarController::class, 'update']);
     Route::delete('delete-hangar/{id}', [HangarController::class, 'destroy']);
-    Route::get('get-apartment/{id}', [ApartmentController::class, 'show']);
+
 
 });
