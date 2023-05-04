@@ -18,5 +18,9 @@ use Modules\Property\Http\Controllers\Agency\ApartmentController;
 Route::middleware('auth:api')->group( function () {
 
 Route::post('add-apartment', [ApartmentController::class, 'store']);
+Route::get('get-apartments', [ApartmentController::class, 'index']);
+Route::get('get-apartment/{id}', [ApartmentController::class, 'show']);
+Route::post('update-apartment/{id}', [ApartmentController::class, 'update']);
+Route::delete('delete-apartment/{id}', [ApartmentController::class, 'destroy']);
 
 });

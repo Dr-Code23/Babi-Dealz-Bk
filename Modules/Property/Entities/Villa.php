@@ -15,6 +15,8 @@ class Villa extends Model
 
 
 
+
+
     public function getAllMediaUrls(string $collectionName = 'default'): array
     {
         return $this->getMedia($collectionName)

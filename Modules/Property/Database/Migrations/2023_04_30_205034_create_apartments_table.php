@@ -31,6 +31,7 @@ return new class extends Migration
                 ->constrained('users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->string('type')->default('apartment');
             $table->string('address')->nullable();
             $table->double('latitude', 15, 8)->nullable();
             $table->double('longitude', 15, 8)->nullable();
@@ -41,7 +42,6 @@ return new class extends Migration
             $table->integer('number_of_bathroom');
             $table->integer('role_number');
             $table->string('description')->nullable();
-            $table->string('type')->default('apartment');
 
             $table->timestamps();
         });

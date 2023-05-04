@@ -11,7 +11,7 @@ class Land extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $guarded = [];
 
     public function getAllMediaUrls(string $collectionName = 'default'): array
     {

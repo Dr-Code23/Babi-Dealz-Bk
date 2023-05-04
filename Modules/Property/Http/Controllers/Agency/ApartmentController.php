@@ -18,36 +18,23 @@ class ApartmentController extends Controller
     }
     public function index()
     {
-        return view('property::index');
+        return $this->apartmentServices->getAllData();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
     public function create()
     {
         return view('property::create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
-     */
+
     public function store(ApartmentRequest $request)
     {
         return $this->apartmentServices->storeData($request);
     }
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
     public function show($id)
     {
-        return view('property::show');
+        return $this->apartmentServices->getDataById($id);
     }
 
     /**
@@ -60,24 +47,13 @@ class ApartmentController extends Controller
         return view('property::edit');
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
+    public function update(ApartmentRequest $request, $id)
     {
-        //
+        return $this->apartmentServices->updateDataById($request,$id);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
     public function destroy($id)
     {
-        //
+        return $this->apartmentServices->deleteData($id);
     }
 }

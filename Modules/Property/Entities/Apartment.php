@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\City\Entities\City;
 use Modules\City\Entities\Country;
-
 use Modules\Favorite\Entities\Favorite;
 use Modules\Feature\Entities\Feature;
 use Modules\PropertyType\Entities\PropertyType;

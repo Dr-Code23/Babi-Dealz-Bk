@@ -56,6 +56,7 @@ class  ApartmentServices
 
     public function getAllData()
     {
+
         $apartment = $this->apartmentModel->with('media')->get();
 
         if (!$apartment) {
@@ -67,7 +68,7 @@ class  ApartmentServices
 
     public function getDataById($id)
     {
-        $apartment = $this->apartmentModel->find($id);
+        $apartment = Apartment::with('media')->find($id);
 
         if (!$apartment) {
             return $this->apiResponse([], 'apartment not found.', 404);
@@ -76,23 +77,46 @@ class  ApartmentServices
         return $this->apiResponse($apartment, 'Successfully retrieved apartment.', 200);
     }
 
-//    public function updateData($id, $data): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
-//    {
-//        $apertment = $this->apartmentModel->find($id);
-//
-//        if (!$apertment) {
-//            return $this->apiResponse([], 'Feature not found.', 404);
-//        }
-//
-//        $updatedData = [
-//
-//            'title'=>$data->title
-//        ];
-//
-//        $apertment->update($updatedData);
-//
-//        return $this->apiResponse(new ApartmentResource($apertment), 'Successfully updated apartment.', 200);
-//    }
+    public function updateDataById($data,$id)
+    {
+        $apartment = $this->apartmentModel->findOrFail($id);
+
+        $updatedData = [
+            'property_type_id' => $data->input('property_type_id'),
+            'city_id' => $data->input('city_id'),
+            'country_id' => $data->input('country_id'),
+            'address' => $data->input('address'),
+            'latitude' => $data->input('latitude'),
+            'longitude' => $data->input('longitude'),
+            'space' => $data->input('space'),
+            'budget' => $data->input('budget'),
+            'number_of_rooms' => $data->input('number_of_rooms'),
+            'number_of_kitchen' => $data->input('number_of_kitchen'),
+            'number_of_bathroom' => $data->input('number_of_bathroom'),
+            'role_number' => $data->input('role_number'),
+            'description' => $data->input('description')
+        ];
+
+        $apartment->update($updatedData);
+
+        if ($data->gallery) {
+            foreach ($data->gallery as $gallery) {
+                $apartment->addMedia($gallery)->toMediaCollection('apartments');
+            }
+        }
+
+        $apartment->features()->sync($data->feature_id);
+
+        if (!$apartment) {
+            // Handle any errors that occur while sending SMS
+            return $this->apiResponse([],'Failed to update Apartment. Please try again later.',500) ;
+        }
+
+        $apartment->load('media');
+
+        return $this->apiResponse(new ApartmentResource($apartment),'Apartment updated successfully.',200) ;
+    }
+
 
 
     public function deleteData($id)
