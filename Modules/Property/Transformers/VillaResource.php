@@ -3,6 +3,9 @@
 namespace Modules\Property\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\Auth\Transformers\AgencyResource;
+use Modules\City\Transformers\CityResource;
+use Modules\City\Transformers\CountryResource;
 
 class VillaResource extends JsonResource
 {
@@ -14,6 +17,31 @@ class VillaResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+
+            'id' => $this->id,
+            'agency' => new AgencyResource($this->user),
+            'property_type' => $this->propertytype,
+            'city' => new CityResource($this->city->pluck('name')),
+            'country' => new CountryResource($this->country->pluck('name')),
+            'address' => $this->address ?? '',
+            'latitude' => $this->latitude ?? 0,
+            'longitude' => $this->longitude ??0,
+            'space' => $this->space,
+            'budget' => $this->budget,
+            'number_of_rooms' => $this->number_of_rooms,
+            'number_of_kitchen' => $this->number_of_kitchen,
+            'number_of_bathroom' => $this->number_of_bathroom,
+            'role_villa' => $this->role_number,
+            'description' => $this->description ?? '',
+            'is_there_swimming_pool' => $this->is_there_swimming_pool??'',
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'features' => $this->features->pluck('title'),
+            'gallery' => $this->getAllMediaUrls('villas'),
+            'type'=> $this->type
+
+
+        ];
     }
 }

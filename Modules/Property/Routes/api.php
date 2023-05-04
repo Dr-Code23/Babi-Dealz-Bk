@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Property\Http\Controllers\Agency\ApartmentController;
 use Modules\Property\Http\Controllers\Agency\HangarController;
 use Modules\Property\Http\Controllers\Agency\LandController;
+use Modules\Property\Http\Controllers\Agency\VillaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,5 +39,12 @@ Route::middleware('auth:api')->group( function () {
     Route::get('get-land/{id}', [LandController::class, 'show']);
     Route::post('update-land/{id}', [LandController::class, 'update']);
     Route::delete('delete-land/{id}', [LandController::class, 'destroy']);
+
+    // villa routes
+    Route::post('add-villa', [VillaController::class, 'store']);
+    Route::get('get-villas', [VillaController::class, 'index']);
+    Route::get('get-villa/{id}', [VillaController::class, 'show']);
+    Route::post('update-villa/{id}', [VillaController::class, 'update']);
+    Route::delete('delete-villa/{id}', [VillaController::class, 'destroy']);
 
 });

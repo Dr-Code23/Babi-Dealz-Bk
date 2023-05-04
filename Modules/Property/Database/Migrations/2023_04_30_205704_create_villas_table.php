@@ -31,10 +31,18 @@ return new class extends Migration
                 ->constrained('users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('type')->default('apartment');
+            $table->string('type')->default('villa');
             $table->string('address')->nullable();
             $table->double('latitude', 15, 8)->nullable();
             $table->double('longitude', 15, 8)->nullable();
+            $table->float('space');
+            $table->string('budget');
+            $table->integer('number_of_rooms');
+            $table->integer('number_of_kitchen');
+            $table->integer('number_of_bathroom');
+            $table->integer('role_villa');
+            $table->string('description')->nullable();
+            $table->string('is_there_swimming_pool')->nullable();
 
             $table->timestamps();
         });

@@ -59,10 +59,10 @@ class  ApartmentServices
         $apartment = $this->apartmentModel->with('media')->get();
 
         if (!$apartment) {
-            return $this->apiResponse([], 'No features found.', 404);
+            return $this->apiResponse([], 'No apartments found.', 404);
         }
 
-        return $this->apiResponse(ApartmentResource::collection($apartment), 'Successfully retrieved all features.', 200);
+        return $this->apiResponse(ApartmentResource::collection($apartment), 'Successfully retrieved all apartments.', 200);
     }
 
     public function getDataById($id)

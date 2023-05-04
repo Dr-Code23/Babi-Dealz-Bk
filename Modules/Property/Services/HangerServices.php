@@ -58,10 +58,10 @@ class HangerServices{
         $hangar = $this->hangarModel->with('media')->get();
 
         if (!$hangar) {
-            return $this->apiResponse([], 'No features found.', 404);
+            return $this->apiResponse([], 'No hangars found.', 404);
         }
 
-        return $this->apiResponse(HangarResource::collection($hangar), 'Successfully retrieved all features.', 200);
+        return $this->apiResponse(HangarResource::collection($hangar), 'Successfully retrieved all hangars.', 200);
     }
 
     public function getDataById($id)

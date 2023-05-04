@@ -3,17 +3,24 @@
 namespace Modules\Property\Http\Controllers\Agency;
 
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Property\Http\Requests\UpdateVillaRequest;
+use Modules\Property\Http\Requests\VillaRequest;
+use Modules\Property\Services\VillaServices;
 
 class VillaController extends Controller
 {
 
+    private VillaServices $villaServices;
+
+    public function __construct(VillaServices $villaServices)
+    {
+        $this->villaServices = $villaServices;
+    }
     public function index()
     {
-        return view('property::index');
+        return $this->villaServices->getAllData();
     }
-
 
     public function create()
     {
@@ -21,19 +28,14 @@ class VillaController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(VillaRequest $request)
     {
-        //
+        return $this->villaServices->storeData($request);
     }
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
     public function show($id)
     {
-        return view('property::show');
+        return $this->villaServices->getDataById($id);
     }
 
     /**
@@ -46,24 +48,13 @@ class VillaController extends Controller
         return view('property::edit');
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
+    public function update(UpdateVillaRequest $request, $id)
     {
-        //
+        return $this->villaServices->updateDataById($request,$id);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
     public function destroy($id)
     {
-        //
+        return $this->villaServices->deleteData($id);
     }
 }

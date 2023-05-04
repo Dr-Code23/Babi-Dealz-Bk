@@ -17,12 +17,7 @@ use Modules\Property\Transformers\LandResource;
 class LandServices{
 
     use ApiResponse;
-//    private Land $landModel;
-//
-//    public function __construct(Land $landModel)
-//    {
-//        $this->landModel = $landModel;
-//    }
+
 
     private  $landModel;
 
