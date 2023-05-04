@@ -4,10 +4,8 @@ namespace Modules\Property\Services;
 use Illuminate\Support\Facades\Auth;
 use Modules\ApiResource\ApiResponse;
 use Modules\Property\Entities\Hangar;
-use Modules\Property\Transformers\ApartmentResource;
 use Modules\Property\Transformers\HangarResource;
 
-//use Modules\Property\Transformers\ApartmentResource;
 
 class HangerServices{
     use ApiResponse;

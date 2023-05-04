@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Modules\Property\Http\Controllers\Agency\ApartmentController;
 use Modules\Property\Http\Controllers\Agency\HangarController;
+use Modules\Property\Http\Controllers\Agency\LandController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,5 +32,11 @@ Route::middleware('auth:api')->group( function () {
     Route::post('update-hangar/{id}', [HangarController::class, 'update']);
     Route::delete('delete-hangar/{id}', [HangarController::class, 'destroy']);
 
+    // land routes
+    Route::post('add-land', [LandController::class, 'store']);
+    Route::get('get-lands', [LandController::class, 'index']);
+    Route::get('get-land/{id}', [LandController::class, 'show']);
+    Route::post('update-land/{id}', [LandController::class, 'update']);
+    Route::delete('delete-land/{id}', [LandController::class, 'destroy']);
 
 });

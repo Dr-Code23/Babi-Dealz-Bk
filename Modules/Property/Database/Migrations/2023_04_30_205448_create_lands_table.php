@@ -35,7 +35,10 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->double('latitude', 15, 8)->nullable();
             $table->double('longitude', 15, 8)->nullable();
-
+            $table->double('length');
+            $table->double('width');
+            $table->string('budget');
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }
