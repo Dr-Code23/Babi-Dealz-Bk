@@ -37,6 +37,8 @@ class HangarResource extends JsonResource
             'updated_at' => $this->updated_at,
             'features' => $this->features->pluck('title'),
             'gallery' => $this->getAllMediaUrls('hangars'),
+            'type'=> $this->type
+
         ];
     }
 }
