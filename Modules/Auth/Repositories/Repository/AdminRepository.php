@@ -4,11 +4,8 @@ namespace Modules\Auth\Repositories\Repository;
 
 
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Modules\ApiResource\ApiResponse;
-use Modules\Auth\Emails\EventMail;
 use Modules\Auth\Entities\Notification;
 use Modules\Auth\Repositories\Interfaces\AdminRepositoryInterface;
 use Modules\Auth\Traits\pushNotificationTraite;

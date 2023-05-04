@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Modules\PropertyType\Http\Controllers\PropertyTypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,6 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/propertytype', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:api')->group( function () {
+    Route::get('/property-types', [PropertyTypeController::class, 'index']);
 });
