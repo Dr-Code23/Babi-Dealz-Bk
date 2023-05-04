@@ -5,6 +5,8 @@ namespace Modules\Property\Http\Controllers\Agency;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Property\Http\Requests\HangarRequest;
+use Modules\Property\Services\HangerServices;
 
 class HangarController extends Controller
 {
@@ -12,9 +14,16 @@ class HangarController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
+
+    private HangerServices $hangarServices;
+
+    public function __construct(HangerServices $hangarServices)
+    {
+        $this->hangarServices = $hangarServices;
+    }
     public function index()
     {
-        return view('property::index');
+        return $this->hangarServices->getAllData();
     }
 
     /**
@@ -31,9 +40,9 @@ class HangarController extends Controller
      * @param Request $request
      * @return Renderable
      */
-    public function store(Request $request)
+    public function store(HangarRequest $request)
     {
-        //
+        return $this->hangarServices->storeData($request);
     }
 
     /**
@@ -43,7 +52,7 @@ class HangarController extends Controller
      */
     public function show($id)
     {
-        return view('property::show');
+        return $this->hangarServices->getDataById($id);
     }
 
     /**
@@ -62,9 +71,9 @@ class HangarController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(Request $request, $id)
+    public function update(HangarRequest $request, $id)
     {
-        //
+        return $this->hangarServices->updateDataById($request,$id);
     }
 
     /**
@@ -74,6 +83,6 @@ class HangarController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return $this->hangarServices->deleteData($id);
     }
 }

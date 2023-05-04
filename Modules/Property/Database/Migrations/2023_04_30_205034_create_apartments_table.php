@@ -42,7 +42,6 @@ return new class extends Migration
             $table->integer('number_of_bathroom');
             $table->integer('role_number');
             $table->string('description')->nullable();
-
             $table->timestamps();
         });
     }
