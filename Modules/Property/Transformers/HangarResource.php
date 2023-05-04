@@ -3,6 +3,9 @@
 namespace Modules\Property\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\Auth\Transformers\AgencyResource;
+use Modules\City\Transformers\CityResource;
+use Modules\City\Transformers\CountryResource;
 
 class HangarResource extends JsonResource
 {
@@ -14,6 +17,30 @@ class HangarResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+
+            'id' => $this->id,
+            'user_id' => $this->user_id,
+            'property_type_id' => $this->property_type_id,
+            'city_id' => $this->city_id,
+            'country_id' => $this->country_id,
+            'address' => $this->address ?? '',
+            'latitude' => $this->latitude ?? 0,
+            'longitude' => $this->longitude ??0,
+            'length' => $this->length,
+            'width' => $this->width,
+            'budget' => $this->budget,
+            'description' => $this->description ?? '',
+            'is_there_path_room'=>$this->is_there_path_room??'',
+            'space_path_room'=>$this->space_path_room,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'features' => $this->features->pluck('title'),
+            'gallery' => $this->getAllMediaUrls('hangars'),
+            'user' => new AgencyResource($this->user),
+            'property_type' => $this->whenLoaded('propertyType'),
+            'city' => new CityResource($this->city->pluck('name')),
+            'country' => new CountryResource($this->country->pluck('name'))
+        ];
     }
 }
