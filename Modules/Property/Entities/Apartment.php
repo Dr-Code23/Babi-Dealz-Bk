@@ -31,7 +31,7 @@ class Apartment extends Model implements HasMedia
     }
     public function propertytype()
     {
-        return $this->belongsTo(PropertyType::class);
+        return $this->belongsTo(PropertyType::class,'property_type_id','id');
     }
     public function user()
     {
