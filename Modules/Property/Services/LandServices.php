@@ -62,7 +62,7 @@ class LandServices{
             return $this->apiResponse([],'Failed to store Land. Please try again later.',500) ;
         }
         $land->with('media');
-        return $this->apiResponse( new LandRequest($land),' successful you insert land.',200) ;
+        return $this->apiResponse( new LandResource($land),' successful you insert land.',200) ;
     }
 
     public function getAllData()
