@@ -21,7 +21,7 @@ class Land extends Model
     }
     public function features()
     {
-        return $this->belongsToMany(Feature::class,'feature_property')->withTimestamps();
+        return $this->belongsToMany(Feature::class,'feature_property');
     }
     public function favorites()
     {

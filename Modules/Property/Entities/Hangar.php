@@ -29,12 +29,15 @@ class Hangar extends Model  implements HasMedia
     }
     public function propertytype()
     {
-        return $this->belongsTo(PropertyType::class);
+        return $this->belongsTo(PropertyType::class,'property_type_id','id');
     }
-
     public function user()
     {
         return $this->belongsTo(User::class,'user_id','id');
+    }
+    public function features()
+    {
+        return $this->belongsToMany(Feature::class, 'feature_property');
     }
 
     public function getAllMediaUrls(string $collectionName = 'default'): array
@@ -43,10 +46,7 @@ class Hangar extends Model  implements HasMedia
             ->map(fn ($media) => $media->getUrl())
             ->toArray();
     }
-    public function features()
-    {
-        return $this->belongsToMany(Feature::class,'feature_property')->withTimestamps();
-    }
+
     public function favorites()
     {
         return $this->morphMany(Favorite::class, 'favoritable');

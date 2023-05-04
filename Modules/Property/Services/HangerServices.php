@@ -82,23 +82,7 @@ class HangerServices{
     {
         $hangar = $this->hangarModel->findOrFail($id);
 
-        $updatedData = [
-            'user_id' => Auth::id(),
-            'property_type_id' => $data->input('property_type_id'),
-            'city_id' => $data->input('city_id'),
-            'country_id' => $data->input('country_id'),
-            'address' => $data->input('address'),
-            'latitude' => $data->input('latitude'),
-            'longitude' => $data->input('longitude'),
-            'length' => $data->input('length'),
-            'width' => $data->input('width'),
-            'budget' => $data->input('budget'),
-            'is_there_path_room' => $data->input('is_there_path_room'),
-            'space_path_room' => $data->input('space_path_room'),
-            'description' => $data->input('description')
-        ];
-
-        $hangar->update($updatedData);
+        $hangar->update($data->except('gallery'));
 
         if ($data->gallery) {
             foreach ($data->gallery as $gallery) {
@@ -112,8 +96,6 @@ class HangerServices{
             // Handle any errors that occur while sending SMS
             return $this->apiResponse([],'Failed to update Hangar Please try again later.',500) ;
         }
-
-        $hangar->load('media');
 
         return $this->apiResponse(new HangarResource($hangar),'Hangar updated successfully.',200) ;
     }
