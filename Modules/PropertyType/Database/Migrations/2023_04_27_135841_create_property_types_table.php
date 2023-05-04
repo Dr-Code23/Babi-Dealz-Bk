@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -15,8 +16,17 @@ return new class extends Migration
     {
         Schema::create('property_types', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->timestamps();
         });
+
+        DB::table('property_types')->insert([
+            ['name' => 'Apartment'],
+            ['name' => 'Villa'],
+            ['name' => 'Shop'],
+            ['name' => 'Land'],
+            ['name' => 'Hangar']
+        ]);
     }
 
     /**
