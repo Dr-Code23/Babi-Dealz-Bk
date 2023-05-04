@@ -284,7 +284,7 @@ class UserRepository implements UserRepositoryInterface
     {
         $id = Auth::id();
         $user = $this->userModel->find($id);
-        $user->update($data->all());
+        $user->update($data->except('gallery'));
         if ($data->hasFile('photo')) {
             $user->media()->delete();
             $user->addMediaFromRequest('photo')->toMediaCollection('avatar');

@@ -27,15 +27,14 @@ class  ApartmentServices
             'address' => $data->input('address'),
             'latitude' => $data->input('latitude'),
             'longitude' => $data->input('longitude'),
-            'space' => $data->input('space'),
+            'space' => (int)$data->input('space'),
             'budget' => $data->input('budget'),
-            'number_of_rooms' => $data->input('number_of_rooms'),
-            'number_of_kitchen' => $data->input('number_of_kitchen'),
-            'number_of_bathroom' => $data->input('number_of_bathroom'),
-            'role_number' => $data->input('role_number'),
+            'number_of_rooms' => (int)$data->input('number_of_rooms'),
+            'number_of_kitchen' => (int)$data->input('number_of_kitchen'),
+            'number_of_bathroom' => (int)$data->input('number_of_bathroom'),
+            'role_number' => (int)$data->input('role_number'),
             'description' => $data->input('description')
         ]);
-
         if ($data->gallery) {
             foreach ($data->gallery as $gallery) {
                 $apartment->addMedia($gallery)->toMediaCollection('apartments');
@@ -74,32 +73,20 @@ class  ApartmentServices
             return $this->apiResponse([], 'apartment not found.', 404);
         }
 
-        return $this->apiResponse($apartment, 'Successfully retrieved apartment.', 200);
+        return $this->apiResponse(new ApartmentResource($apartment), 'Successfully retrieved apartment.', 200);
     }
 
     public function updateDataById($data,$id)
     {
         $apartment = $this->apartmentModel->findOrFail($id);
 
-        $updatedData = [
-            'property_type_id' => $data->input('property_type_id'),
-            'city_id' => $data->input('city_id'),
-            'country_id' => $data->input('country_id'),
-            'address' => $data->input('address'),
-            'latitude' => $data->input('latitude'),
-            'longitude' => $data->input('longitude'),
-            'space' => $data->input('space'),
-            'budget' => $data->input('budget'),
-            'number_of_rooms' => $data->input('number_of_rooms'),
-            'number_of_kitchen' => $data->input('number_of_kitchen'),
-            'number_of_bathroom' => $data->input('number_of_bathroom'),
-            'role_number' => $data->input('role_number'),
-            'description' => $data->input('description')
-        ];
+        $apartment->update($data->except('gallery'));
 
-        $apartment->update($updatedData);
+
 
         if ($data->gallery) {
+            $apartment->media()->delete();
+
             foreach ($data->gallery as $gallery) {
                 $apartment->addMedia($gallery)->toMediaCollection('apartments');
             }

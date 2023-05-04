@@ -6,6 +6,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Property\Http\Requests\ApartmentRequest;
+use Modules\Property\Http\Requests\UpdateApartmentRequest;
 use Modules\Property\Services\ApartmentServices;
 
 class ApartmentController extends Controller
@@ -47,7 +48,7 @@ class ApartmentController extends Controller
         return view('property::edit');
     }
 
-    public function update(ApartmentRequest $request, $id)
+    public function update(UpdateApartmentRequest $request, $id)
     {
         return $this->apartmentServices->updateDataById($request,$id);
     }
