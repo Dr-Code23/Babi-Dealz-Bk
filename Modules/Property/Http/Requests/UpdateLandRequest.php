@@ -4,8 +4,13 @@ namespace Modules\Property\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateVillaRequest extends FormRequest
+class UpdateLandRequest extends FormRequest
 {
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
     public function rules()
     {
         return [
@@ -16,18 +21,19 @@ class UpdateVillaRequest extends FormRequest
             'address' => 'nullable|string|max:255',
             'latitude' => 'nullable|numeric|between:-90,90',
             'longitude' => 'nullable|numeric|between:-180,180',
-            'space' => 'numeric|min:1',
+            'length' => 'numeric|min:1',
+            'width' => 'numeric|min:1',
             'budget' => 'regex:/^\d+(\.\d{1,2})?$/',
-            'number_of_rooms' => 'integer|min:1',
-            'number_of_kitchen' => 'integer|min:0',
-            'number_of_bathroom' => 'integer|min:1',
-            'role_villa' => 'integer|min:1',
             'description' => 'nullable|string|max:1000',
-            'is_there_swimming_pool' => 'nullable|string|max:1000',
             'gallery' => ['max:2048'],
         ];
     }
 
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
     public function authorize()
     {
         return true;

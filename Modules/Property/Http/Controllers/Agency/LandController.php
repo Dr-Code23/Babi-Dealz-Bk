@@ -6,6 +6,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Property\Http\Requests\LandRequest;
+use Modules\Property\Http\Requests\UpdateLandRequest;
 use Modules\Property\Services\LandServices;
 
 class LandController extends Controller
@@ -66,7 +67,7 @@ class LandController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(LandRequest $request, $id)
+    public function update(UpdateLandRequest $request, $id)
     {
         return $this->landServices->updateDataById($request,$id);
     }

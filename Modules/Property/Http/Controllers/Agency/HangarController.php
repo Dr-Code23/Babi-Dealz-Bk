@@ -6,6 +6,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Property\Http\Requests\HangarRequest;
+use Modules\Property\Http\Requests\UpdateHangarRequest;
 use Modules\Property\Services\HangerServices;
 
 class HangarController extends Controller
@@ -71,7 +72,7 @@ class HangarController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(HangarRequest $request, $id)
+    public function update(UpdateHangarRequest $request, $id)
     {
         return $this->hangarServices->updateDataById($request,$id);
     }

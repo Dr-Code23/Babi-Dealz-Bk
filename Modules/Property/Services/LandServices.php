@@ -87,21 +87,7 @@ class LandServices{
     {
         $land = $this->landModel->findOrFail($id);
 
-        $updatedData = [
-            'user_id' => Auth::id(),
-            'property_type_id' => $data->input('property_type_id'),
-            'city_id' => $data->input('city_id'),
-            'country_id' => $data->input('country_id'),
-            'address' => $data->input('address'),
-            'latitude' => $data->input('latitude'),
-            'longitude' => $data->input('longitude'),
-            'length' => $data->input('length'),
-            'width' => $data->input('width'),
-            'budget' => $data->input('budget'),
-            'description' => $data->input('description')
-        ];
-
-        $land->update($updatedData);
+        $land->update($data->except('gallery'));
 
         if ($data->gallery) {
             foreach ($data->gallery as $gallery) {
