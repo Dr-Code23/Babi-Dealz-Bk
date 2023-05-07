@@ -7,6 +7,7 @@ use Modules\Property\Http\Controllers\Agency\HangarController;
 use Modules\Property\Http\Controllers\Agency\LandController;
 use Modules\Property\Http\Controllers\Agency\ShopController;
 use Modules\Property\Http\Controllers\Agency\VillaController;
+use Modules\Property\Http\Controllers\Customer\PropertyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,6 +66,10 @@ Route::middleware('auth:api')->prefix("admin")->group( function () {
 
 
 Route::middleware('auth:api')->prefix("customer")->group( function () {
-
-
+    Route::get('get-propertys', [PropertyController::class, 'index']);
+    Route::get('get-apartment/{id}', [PropertyController::class, 'showApartment']);
+    Route::get('get-shop/{id}', [PropertyController::class, 'showShop']);
+    Route::get('get-hangar/{id}', [PropertyController::class, 'showHangar']);
+    Route::get('get-villa/{id}', [PropertyController::class, 'showVilla']);
+    Route::get('get-land/{id}', [PropertyController::class, 'showLand']);
 });

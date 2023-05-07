@@ -21,6 +21,10 @@ class Apartment extends Model implements HasMedia
 
     protected $guarded = [];
 
+//    public static function collection($apartments)
+//    {
+//    }
+
     public function city()
     {
         return $this->belongsTo(City::class,'city_id','id');
