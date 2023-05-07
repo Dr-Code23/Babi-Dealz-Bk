@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Property\Http\Controllers\Agency\ApartmentController;
 use Modules\Property\Http\Controllers\Agency\HangarController;
 use Modules\Property\Http\Controllers\Agency\LandController;
+use Modules\Property\Http\Controllers\Agency\ShopController;
 use Modules\Property\Http\Controllers\Agency\VillaController;
 
 /*
@@ -46,5 +47,24 @@ Route::middleware('auth:api')->group( function () {
     Route::get('get-villa/{id}', [VillaController::class, 'show']);
     Route::post('update-villa/{id}', [VillaController::class, 'update']);
     Route::delete('delete-villa/{id}', [VillaController::class, 'destroy']);
+
+    // shop routes
+    Route::post('add-shop', [ShopController::class, 'store']);
+    Route::get('get-shops', [ShopController::class, 'index']);
+    Route::get('get-shop/{id}', [ShopController::class, 'show']);
+    Route::post('update-shop/{id}', [ShopController::class, 'update']);
+    Route::delete('delete-shop/{id}', [ShopController::class, 'destroy']);
+
+});
+
+
+Route::middleware('auth:api')->prefix("admin")->group( function () {
+
+
+});
+
+
+Route::middleware('auth:api')->prefix("customer")->group( function () {
+
 
 });

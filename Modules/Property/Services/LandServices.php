@@ -63,7 +63,7 @@ class LandServices{
     public function getAllData()
     {
 
-        $land = $this->landModel->with('media')->get();
+        $land = $this->landModel->where("user_id",Auth::id())->get();
 
         if (!$land) {
             return $this->apiResponse([], 'No lands found.', 404);
@@ -74,7 +74,7 @@ class LandServices{
 
     public function getDataById($id)
     {
-        $land = Land::with(relations: 'media')->find($id);
+        $land = Land::where("user_id",Auth::id())->find($id);
 
         if (!$land) {
             return $this->apiResponse([], 'land not found.', 404);

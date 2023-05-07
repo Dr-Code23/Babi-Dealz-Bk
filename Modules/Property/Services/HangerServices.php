@@ -55,7 +55,7 @@ class HangerServices{
     public function getAllData()
     {
 
-        $hangar = $this->hangarModel->with('media')->get();
+        $hangar = $this->hangarModel->where("user_id",Auth::id())->get();
 
         if (!$hangar) {
             return $this->apiResponse([], 'No hangars found.', 404);
@@ -66,7 +66,7 @@ class HangerServices{
 
     public function getDataById($id)
     {
-        $hangar = Hangar::with(relations: 'media')->find($id);
+        $hangar = Hangar::where("user_id",Auth::id())->find($id);
 //        $hangar =$this->hangarModel->find($id);
 
         if (!$hangar) {
@@ -80,6 +80,11 @@ class HangerServices{
     {
         $hangar = $this->hangarModel->findOrFail($id);
 
+        if (!$hangar) {
+            // Handle any errors that occur while sending SMS
+            return $this->apiResponse([],'Failed to update Hangar Please try again later.',500) ;
+        }
+
         $hangar->update($data->except('gallery'));
 
         if ($data->gallery) {
@@ -90,10 +95,7 @@ class HangerServices{
 
         $hangar->features()->sync($data->feature_id);
 
-        if (!$hangar) {
-            // Handle any errors that occur while sending SMS
-            return $this->apiResponse([],'Failed to update Hangar Please try again later.',500) ;
-        }
+
 
         return $this->apiResponse(new HangarResource($hangar),'Hangar updated successfully.',200) ;
     }

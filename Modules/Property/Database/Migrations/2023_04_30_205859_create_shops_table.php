@@ -41,7 +41,6 @@ return new class extends Migration
             $table->string('is_there_path_room')->nullable();
             $table->string('space_path_room');
             $table->string('description')->nullable();
-
             $table->timestamps();
         });
     }

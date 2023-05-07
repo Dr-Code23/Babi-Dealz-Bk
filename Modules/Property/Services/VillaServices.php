@@ -58,7 +58,7 @@ class VillaServices
     public function getAllData()
     {
 
-        $villa = $this->villaModel->with('media')->get();
+        $villa = $this->villaModel->where("user_id",Auth::id())->get();
 
         if (!$villa) {
             return $this->apiResponse([], 'No villas found.', 404);
@@ -69,7 +69,7 @@ class VillaServices
 
     public function getDataById($id)
     {
-        $villa = villa::with(relations: 'media')->find($id);
+        $villa = villa::where("user_id",Auth::id())->find($id);
 
         if (!$villa) {
             return $this->apiResponse([], 'villa not found.', 404);

@@ -5,16 +5,21 @@ namespace Modules\Property\Http\Controllers\Agency;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Property\Http\Requests\ShopRequest;
+use Modules\Property\Http\Requests\UpdateShopRequest;
+use Modules\Property\Services\ShopServices;
 
 class ShopController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
+    private ShopServices $shopServices;
+
+    public function __construct(ShopServices $shopServices)
+    {
+        $this->shopServices = $shopServices;
+    }
     public function index()
     {
-        return view('property::index');
+        return $this->shopServices->getAllData();
     }
 
     /**
@@ -31,9 +36,9 @@ class ShopController extends Controller
      * @param Request $request
      * @return Renderable
      */
-    public function store(Request $request)
+    public function store(ShopRequest $request)
     {
-        //
+        return $this->shopServices->storeData($request);
     }
 
     /**
@@ -43,7 +48,7 @@ class ShopController extends Controller
      */
     public function show($id)
     {
-        return view('property::show');
+        return $this->shopServices->getDataById($id);
     }
 
     /**
@@ -62,9 +67,9 @@ class ShopController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(Request $request, $id)
+    public function update(UpdateShopRequest $request, $id)
     {
-        //
+        return $this->shopServices->updateDataById($request,$id);
     }
 
     /**
@@ -74,6 +79,6 @@ class ShopController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return $this->shopServices->deleteData($id);
     }
 }
