@@ -16,6 +16,11 @@ use Modules\Property\Services\HangerServices;
 use Modules\Property\Services\LandServices;
 use Modules\Property\Services\ShopServices;
 use Modules\Property\Services\VillaServices;
+use Modules\Property\Transformers\ApartmentResource;
+use Modules\Property\Transformers\HangarResource;
+use Modules\Property\Transformers\LandResource;
+use Modules\Property\Transformers\ShopResource;
+use Modules\Property\Transformers\VillaResource;
 
 class PropertyController extends Controller
 {       use ApiResponse;
@@ -57,11 +62,11 @@ class PropertyController extends Controller
 
         return $this->apiResponse(
             [
-                'apartments'=> $apartments,
-                'hangars'=> $hangars,
-                'lands'=>$lands,
-                'shops'=>$shops,
-                'villas'=> $villas
+                'apartments'=>ApartmentResource::collection( $apartments),
+                'hangars'=>HangarResource::collection( $hangars),
+                'lands'=>LandResource::collection( $lands),
+                'shops'=>ShopResource::collection( $shops),
+                'villas'=>VillaResource::collection( $villas)
         ], 'Successfully retrieved all propertys.', 200);
     }
 

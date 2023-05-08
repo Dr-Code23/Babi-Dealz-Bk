@@ -60,7 +60,16 @@ Route::middleware('auth:api')->group( function () {
 
 
 Route::middleware('auth:api')->prefix("admin")->group( function () {
-
+    Route::get('get-apartments', [\Modules\Property\Http\Controllers\Admin\PropertyController::class, 'indexApartment']);
+    Route::get('get-lands', [\Modules\Property\Http\Controllers\Admin\PropertyController::class, 'indexLand']);
+    Route::get('get-shops', [\Modules\Property\Http\Controllers\Admin\PropertyController::class, 'indexShop']);
+    Route::get('get-hangars', [\Modules\Property\Http\Controllers\Admin\PropertyController::class, 'indexHangar']);
+    Route::get('get-villas', [\Modules\Property\Http\Controllers\Admin\PropertyController::class, 'indexVilla']);
+    Route::get('get-apartment/{id}', [\Modules\Property\Http\Controllers\Admin\PropertyController::class, 'showApartment']);
+    Route::get('get-shop/{id}', [\Modules\Property\Http\Controllers\Admin\PropertyController::class, 'showShop']);
+    Route::get('get-hangar/{id}', [\Modules\Property\Http\Controllers\Admin\PropertyController::class, 'showHangar']);
+    Route::get('get-villa/{id}', [\Modules\Property\Http\Controllers\Admin\PropertyController::class, 'showVilla']);
+    Route::get('get-land/{id}', [\Modules\Property\Http\Controllers\Admin\PropertyController::class, 'showLand']);
 
 });
 
