@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Property\Http\Controllers\Customer;
+namespace Modules\Property\Http\Controllers\User;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
@@ -14,6 +14,7 @@ use Modules\Property\Entities\Villa;
 use Modules\Property\Services\ApartmentServices;
 use Modules\Property\Services\HangerServices;
 use Modules\Property\Services\LandServices;
+use Modules\Property\Services\PropertyUserServices;
 use Modules\Property\Services\ShopServices;
 use Modules\Property\Services\VillaServices;
 use Modules\Property\Transformers\ApartmentResource;
@@ -23,33 +24,15 @@ use Modules\Property\Transformers\ShopResource;
 use Modules\Property\Transformers\VillaResource;
 
 class PropertyController extends Controller
-{       use ApiResponse;
-    private ApartmentServices $apartmentServices;
-    private HangerServices $hangarServices;
-    private LandServices $landServices;
-    private ShopServices $shopServices;
-    private VillaServices $villaServices;
+{
+    use ApiResponse;
+    private PropertyUserServices $propertyuserServices;
 
 
-
-    public function __construct
-        (
-            ApartmentServices $apartmentServices,
-            HangerServices $hangarServices,
-            LandServices $landServices,
-            ShopServices $shopServices,
-            VillaServices $villaServices
-        )
+    public function __construct(PropertyUserServices $propertyuserServices)
     {
-        $this->apartmentServices = $apartmentServices;
-        $this->hangarServices = $hangarServices;
-        $this->landServices = $landServices;
-        $this->shopServices = $shopServices;
-        $this->villaServices = $villaServices;
-
+        $this->propertyuserServices =$propertyuserServices;
     }
-
-
 
 
     public function index()
@@ -72,23 +55,23 @@ class PropertyController extends Controller
 
     public function showApartment($id)
         {
-            return $this->apartmentServices->getDataById($id);
+            return   $this->propertyuserServices->getDataByIdApartment($id);
         }
     public function showVilla($id)
         {
-            return $this->villaServices->getDataById($id);
+            return   $this->propertyuserServices->getDataByIdVilla($id);
         }
     public function showLand($id)
         {
-            return $this->landServices->getDataById($id);
+            return   $this->propertyuserServices->getDataByIdLand($id);
         }
     public function showShop($id)
         {
-            return $this->shopServices->getDataById($id);
+            return   $this->propertyuserServices->getDataByIdShop($id);
         }
     public function showHangar($id)
         {
-            return $this->hangarServices->getDataById($id);
+            return   $this->propertyuserServices->getDataByIdHangar($id);
         }
 
     /**

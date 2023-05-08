@@ -9,76 +9,62 @@ use Modules\ApiResource\ApiResponse;
 use Modules\Property\Services\ApartmentServices;
 use Modules\Property\Services\HangerServices;
 use Modules\Property\Services\LandServices;
+use Modules\Property\Services\PropertyAdminServices;
 use Modules\Property\Services\ShopServices;
 use Modules\Property\Services\VillaServices;
 
 class PropertyController extends Controller
 {
     use ApiResponse;
-    private ApartmentServices $apartmentServices;
-    private HangerServices $hangarServices;
-    private LandServices $landServices;
-    private ShopServices $shopServices;
-    private VillaServices $villaServices;
+
+    private PropertyAdminServices $propertyAdminServices;
 
 
 
-    public function __construct
-    (
-        ApartmentServices $apartmentServices,
-        HangerServices $hangarServices,
-        LandServices $landServices,
-        ShopServices $shopServices,
-        VillaServices $villaServices
-    )
+    public function __construct( PropertyAdminServices $propertyAdminServices)
     {
-        $this->apartmentServices = $apartmentServices;
-        $this->hangarServices = $hangarServices;
-        $this->landServices = $landServices;
-        $this->shopServices = $shopServices;
-        $this->villaServices = $villaServices;
-
+        $this->propertyAdminServices =$propertyAdminServices;
     }
 
     public function indexApartment()
     {
-        return $this->apartmentServices->getAllData();
+        return   $this->propertyAdminServices->getAllDataApartment();
     }
     public function indexVilla()
     {
-        return $this->villaServices->getAllData();
+        return   $this->propertyAdminServices->getAllDataVilla();
     }
     public function indexLand()
     {
-        return $this->landServices->getAllData();
+        return   $this->propertyAdminServices->getAllDataLand();
     }
     public function indexHangar()
     {
-        return $this->hangarServices->getAllData();
+        return  $this->propertyAdminServices->getAllDataHangar();
     }
     public function indexShop()
     {
-        return $this->shopServices->getAllData();
+        return   $this->propertyAdminServices->getAllDataShop();
     }
     public function showApartment($id)
     {
-        return $this->apartmentServices->getDataById($id);
+        return  $this->propertyAdminServices->getDataByIdApartment($id);
     }
     public function showVilla($id)
     {
-        return $this->villaServices->getDataById($id);
+        return    $this->propertyAdminServices->getDataByIdVilla($id);
     }
     public function showLand($id)
     {
-        return $this->landServices->getDataById($id);
+        return   $this->propertyAdminServices->getDataByIdLand($id);
     }
     public function showShop($id)
     {
-        return $this->shopServices->getDataById($id);
+        return   $this->propertyAdminServices->getDataByIdShop($id);
     }
     public function showHangar($id)
     {
-        return $this->hangarServices->getDataById($id);
+        return   $this->propertyAdminServices->getDataByIdHangar($id);
     }
 
 

@@ -67,7 +67,6 @@ class HangerServices{
     public function getDataById($id)
     {
         $hangar = Hangar::where("user_id",Auth::id())->find($id);
-//        $hangar =$this->hangarModel->find($id);
 
         if (!$hangar) {
             return $this->apiResponse([], 'hangar not found.', 404);

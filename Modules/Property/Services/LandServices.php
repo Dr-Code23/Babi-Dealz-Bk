@@ -19,7 +19,7 @@ class LandServices{
     use ApiResponse;
 
 
-    private  $landModel;
+    private Land $landModel;
 
     public function __construct(Land $landModel)
     {

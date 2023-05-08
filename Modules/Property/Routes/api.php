@@ -7,7 +7,7 @@ use Modules\Property\Http\Controllers\Agency\HangarController;
 use Modules\Property\Http\Controllers\Agency\LandController;
 use Modules\Property\Http\Controllers\Agency\ShopController;
 use Modules\Property\Http\Controllers\Agency\VillaController;
-use Modules\Property\Http\Controllers\Customer\PropertyController;
+use Modules\Property\Http\Controllers\User\PropertyController;
 
 /*
 |--------------------------------------------------------------------------
