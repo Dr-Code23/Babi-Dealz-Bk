@@ -56,7 +56,7 @@ class  ApartmentServices
     public function getAllData()
     {
 
-        $apartment = $this->apartmentModel->with('media')->get();
+        $apartment = $this->apartmentModel->where("user_id",Auth::id())->get();
 
         if (!$apartment) {
             return $this->apiResponse([], 'No apartments found.', 404);
@@ -67,7 +67,7 @@ class  ApartmentServices
 
     public function getDataById($id)
     {
-        $apartment = Apartment::with(relations: 'media')->find($id);
+        $apartment = Apartment::where("user_id",Auth::id())->find($id);
 
         if (!$apartment) {
             return $this->apiResponse([], 'apartment not found.', 404);
