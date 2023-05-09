@@ -10,6 +10,7 @@ use Modules\Auth\Http\Controllers\Api\Auth\AuthController;
 use Modules\Auth\Http\Controllers\Api\Auth\ChangePasswordController;
 use Modules\Auth\Http\Controllers\Api\Auth\CompanyController;
 use Modules\Auth\Http\Controllers\Api\Auth\RestePasswordController;
+use Modules\Auth\Http\Controllers\Api\Auth\SendDealController;
 use Modules\Auth\Http\Controllers\Api\Auth\UserProfileController;
 use Modules\ContactUS\Http\Controllers\ContactUsController;
 use Modules\FrontEnd\Http\Controllers\AboutController;
@@ -54,6 +55,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('notification', [AuthController::class, 'notification']);
     Route::get('unreadNotification', [AuthController::class, 'unreadNotification']);
     Route::delete('deleteNotification/{id}', [AuthController::class, 'deleteNotification']);
+    Route::post('/send_deals', [SendDealController::class, 'store']);
 
 
 });
@@ -79,7 +81,9 @@ Route::middleware(['auth:api'])->prefix("admin")->group(function () {
     Route::get('logout', [AdminProfileController::class, 'Logout']);
     Route::post('send', [SendNotificationController::class, 'sendNotification']);
     Route::post('change-password', [ChangePasswordController::class, 'changePassword']);
-
+    Route::get('/deals', [SendDealController::class, 'index']);
+    Route::get('/deals/{id}', [SendDealController::class, 'show']);
+    Route::delete('/deals/{id}', [SendDealController::class, 'destroy']);
 
 });
 /**

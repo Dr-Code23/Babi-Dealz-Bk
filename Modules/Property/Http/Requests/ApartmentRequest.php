@@ -17,7 +17,6 @@ class ApartmentRequest extends FormRequest
             'property_type_id' => 'required|exists:property_types,id',
             'city_id' => 'required|exists:cities,id',
             'country_id' => 'required|exists:countries,id',
-            'user_id' => 'required|exists:users,id',
             'address' => 'nullable|string|max:255',
             'latitude' => 'nullable|numeric|between:-90,90',
             'longitude' => 'nullable|numeric|between:-180,180',
@@ -28,7 +27,7 @@ class ApartmentRequest extends FormRequest
             'number_of_bathroom' => 'required|integer|min:1',
             'role_number' => 'required|integer|min:1',
             'description' => 'nullable|string|max:1000',
-            'gallery' => ['sometimes', 'array', 'max:2048', 'image']
+            'gallery' => ['sometimes', 'array', 'max:2048']
 
         ];
     }

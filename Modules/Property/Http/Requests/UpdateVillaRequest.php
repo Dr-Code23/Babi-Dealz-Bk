@@ -12,7 +12,6 @@ class UpdateVillaRequest extends FormRequest
             'property_type_id' => 'exists:property_types,id',
             'city_id' => 'exists:cities,id',
             'country_id' => 'exists:countries,id',
-            'user_id' => 'exists:users,id',
             'address' => 'nullable|string|max:255',
             'latitude' => 'nullable|numeric|between:-90,90',
             'longitude' => 'nullable|numeric|between:-180,180',

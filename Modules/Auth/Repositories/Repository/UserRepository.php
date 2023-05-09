@@ -17,6 +17,7 @@ use Modules\Auth\Traits\VerificationCode;
 use Modules\Auth\Transformers\AgencyResource;
 use Modules\Auth\Transformers\dealsResource;
 use Modules\Auth\Transformers\UserResource;
+use Modules\FrontEnd\Entities\PolicyAndPrivacy;
 use Modules\FrontEnd\Entities\TermsAndConditions;
 
 class UserRepository implements UserRepositoryInterface
@@ -250,6 +251,8 @@ class UserRepository implements UserRepositoryInterface
         $id = Auth::id();
         $user = $this->userModel->find($id);
         $termsAndConditions = TermsAndConditions::all();
+        $policyAndPrivacy = PolicyAndPrivacy::all();
+
         switch ($user->type) {
             case 'customer':
                 $data = new UserResource($user);
@@ -262,7 +265,7 @@ class UserRepository implements UserRepositoryInterface
                 break;
         }
 
-        return $this->apiResponse([$data,$termsAndConditions ?: []],'profile',200);
+        return $this->apiResponse(['profile' => $data, 'termsAndConditions' => $termsAndConditions ?: [], 'policyAndPrivacy' => $policyAndPrivacy ?? []], 'profile', 200);
     }
 
     /**
@@ -380,6 +383,9 @@ class UserRepository implements UserRepositoryInterface
 
     }
 
+    public function sendDeal($data)
+    {
 
+    }
 
 }

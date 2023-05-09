@@ -37,6 +37,8 @@ interface UserRepositoryInterface
 
     public function sendVerify($data);
 
+    public function sendDeal($data);
+
 }
 
 
