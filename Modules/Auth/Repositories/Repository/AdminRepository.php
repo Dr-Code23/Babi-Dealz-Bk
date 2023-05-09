@@ -92,7 +92,7 @@ class AdminRepository implements AdminRepositoryInterface
 
         $id = auth()->id();
         $user = $this->userModel->find($id);
-        $user->update($data->all());
+        $user->update($data->except('photo'));
         if ($data->hasFile('photo')) {
             $user->media()->delete();
             $user->addMediaFromRequest('photo')->toMediaCollection('avatar');

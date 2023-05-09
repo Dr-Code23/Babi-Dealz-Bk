@@ -131,18 +131,7 @@ class UserRepository implements UserRepositoryInterface
     public function verify($data)
     {
 
-        $verification=$this->verifyCode($data);
-
-        if ($verification) {
-            $user = tap($this->userModel->where('phone', $data['phone']))->update(['isVerified' => true]);
-            // verification successful
-            return $this->apiResponse([],'Phone number verified successfully', 200);
-        } else {
-            // verification failed
-            return $this->apiResponse([],'Invalid verification code', 400);
-
-        }
-
+        return $verification=$this->verifyCode($data);
     }
 
     /**

@@ -18,7 +18,7 @@ class RestePasswordController extends Controller
     {
         $request->validate([
 
-            'email' => 'required|string|email',
+            'phone' => 'required|string|',
 
         ]);
        return  $this->UserRepository->forgotPassword($request);

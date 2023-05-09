@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('device_token')->nullable();
             $table->string('type')->default('customer');
             $table->boolean('isVerified')->default(false);
+            $table->boolean('active')->default(true);
             $table->integer('verification_code')->nullable();
             $table->rememberToken();
             $table->timestamps();
